@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../zookeeper-branch-3.4.13/ZooKeeper.iml" filepath="$PROJECT_DIR$/../zookeeper-branch-3.4.13/ZooKeeper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/zookeeper-3.4.12.iml" filepath="$PROJECT_DIR$/.idea/zookeeper-3.4.12.iml" />
     </modules>
   </component>
 </project>
