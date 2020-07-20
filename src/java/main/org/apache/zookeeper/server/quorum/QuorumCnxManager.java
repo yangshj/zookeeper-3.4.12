@@ -123,12 +123,15 @@ public class QuorumCnxManager {
     /*
      * Mapping from Peer to Thread number
      */
+    // 发送器集合，每个SenderWorker消息发送器，都对应一台远程Zookeeper服务器，负责消息的发送，按照SID进行分组
     final ConcurrentHashMap<Long, SendWorker> senderWorkerMap;
+    // 消息发送队列，用于保存那些待发送的消息，按照SID进行分组
     final ConcurrentHashMap<Long, ArrayBlockingQueue<ByteBuffer>> queueSendMap;
+    // 最近发送过的消息，为每个SID保留最近发送过的一个消息
     final ConcurrentHashMap<Long, ByteBuffer> lastMessageSent;
 
     /*
-     * Reception queue
+     * Reception queue 消息接收队列，用于存放那些从其他服务器接收到的消息
      */
     public final ArrayBlockingQueue<Message> recvQueue;
     /*

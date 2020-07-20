@@ -1,0 +1,27 @@
+
+一、服务器的4中状态:
+
+LOOKING : 寻找Leader状态,处于该状态需要进入选举流程
+LEADING : 领导者状态,表明当前角色为Leader
+FOLLOWING: 跟随者,Leader已经选举出来,表明当前服务角色为Follower
+OBSERVER: 观察者状态, 表明当前服务角色为Observer
+
+二、事务ID:
+ZXID表示,64位数字,由Leader统一分配,全局唯一,不断递增
+
+
+
+1、org.apache.zookeeper.server.quorum.QuorumCnxManager
+    实现领导选举中的网络连接管理功能。
+    它为每一对节点维护唯一的一个连接，在两个节点都启动申请连接时，只有sid大的一方才会申请连接成功。
+    qcm对每个节点维护一个消息发送队列
+
+    属于传输层
+    public final ArrayBlockingQueue<Message> recvQueue; //本节点的消息接收队列
+    final ConcurrentHashMap<Long, SendWorker> senderWorkerMap;//对每一个远程节点都会定义一个SendWorker
+    ConcurrentHashMap<Long, ArrayBlockingQueue<ByteBuffer>> queueSendMap;//每个远程节点都会定义一个消息发型队
+
+2、org.apache.zookeeper.server.quorum.FastLeaderElection
+    LinkedBlockingQueue<ToSend> sendqueue;
+    LinkedBlockingQueue<Notification> recvqueue;
+    属于应用层，也有两个队列和两个线程

@@ -632,13 +632,13 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
     
     @Override
     public synchronized void start() {
-        // 加载数据
+        // 从事务日志目录dataLogDir和数据快照目录dataDir中恢复出DataTree数据
         loadDataBase();
-        // 开启读取数据线程
+        // 开启对客户端的连接端口,启动ServerCnxnFactory主线程
         cnxnFactory.start();
-        // 进行领导者选举，确定服务器角色，再针对不同的服务器角色进行初始化
+        // 创建出选举算法, 初始化
         startLeaderElection();
-        // 启动线程，运行run方法
+        // 启动QuorumPeer线程，在该线程中进行服务器状态的检查
         super.start();
     }
 
@@ -911,7 +911,7 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
                 switch (getPeerState()) {
                 case LOOKING:
                     LOG.info("LOOKING");
-
+                    // 只读服务器，暂时不关心
                     if (Boolean.getBoolean("readonlymode.enabled")) {
                         LOG.info("Attempting to start ReadOnlyZooKeeperServer");
 

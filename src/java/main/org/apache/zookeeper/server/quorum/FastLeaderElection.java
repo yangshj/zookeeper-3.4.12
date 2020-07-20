@@ -466,15 +466,15 @@ public class FastLeaderElection implements Election {
          */
         Messenger(QuorumCnxManager manager) {
 
+            // 创建发送线程
             this.ws = new WorkerSender(manager);
-
             Thread t = new Thread(this.ws,
                     "WorkerSender[myid=" + self.getId() + "]");
             t.setDaemon(true);
             t.start();
 
+            // 创建接受线程
             this.wr = new WorkerReceiver(manager);
-
             t = new Thread(this.wr,
                     "WorkerReceiver[myid=" + self.getId() + "]");
             t.setDaemon(true);
@@ -568,6 +568,7 @@ public class FastLeaderElection implements Election {
 
     /**
      * Send notifications to all peers upon a change in our vote
+     * 给所有参与投票的机器发送通知
      */
     private void sendNotifications() {
         for (QuorumServer server : self.getVotingView().values()) {
@@ -785,6 +786,13 @@ public class FastLeaderElection implements Election {
      * Starts a new round of leader election. Whenever our QuorumPeer
      * changes its state to LOOKING, this method is invoked, and it
      * sends notifications to all other peers.
+     * 开始新一轮领导人选举。
+     * 每当我们的qorumpeer将其状态更改为LOOKING时，就会调用此方法，并向所有其他对等方发送通知
+     * 1、投给自己
+     * 2、接收其它服务器的选票
+     * 3、pk
+     * 4、投票
+     * 5、统计
      */
     public Vote lookForLeader() throws InterruptedException {
         try {
@@ -799,6 +807,7 @@ public class FastLeaderElection implements Election {
            self.start_fle = Time.currentElapsedTime();
         }
         try {
+            // 投票箱，key:其它服务器的sid，value:vote
             HashMap<Long, Vote> recvset = new HashMap<Long, Vote>();
 
             HashMap<Long, Vote> outofelection = new HashMap<Long, Vote>();
@@ -807,12 +816,13 @@ public class FastLeaderElection implements Election {
 
             synchronized(this){
                 logicalclock.incrementAndGet();
+                // 更新提议，包含(myid, lastZxid, epoch) 更新为自己
                 updateProposal(getInitId(), getInitLastLoggedZxid(), getPeerEpoch());
             }
 
             LOG.info("New election. My id =  " + self.getId() +
                     ", proposed zxid=0x" + Long.toHexString(proposedZxid));
-            sendNotifications();
+            sendNotifications(); //启动时先投给自己
 
             /*
              * Loop in which we exchange notifications until we find a leader
