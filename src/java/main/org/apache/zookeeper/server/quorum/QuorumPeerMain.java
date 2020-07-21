@@ -103,17 +103,20 @@ public class QuorumPeerMain {
         }
 
         // Start and schedule the the purge task
+        // 启动一个定时清除日志的任务
         DatadirCleanupManager purgeMgr = new DatadirCleanupManager(config
                 .getDataDir(), config.getDataLogDir(), config
                 .getSnapRetainCount(), config.getPurgeInterval());
         purgeMgr.start();
 
         if (args.length == 1 && config.servers.size() > 0) {
+            // 集群模式
             runFromConfig(config);
         } else {
             LOG.warn("Either no config or no quorum defined in config, running "
                     + " in standalone mode");
             // there is only server in the quorum -- run as standalone
+            // 单机模式
             ZooKeeperServerMain.main(args);
         }
     }

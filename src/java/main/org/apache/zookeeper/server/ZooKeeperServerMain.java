@@ -70,9 +70,7 @@ public class ZooKeeperServerMain {
         System.exit(0);
     }
 
-    protected void initializeAndRun(String[] args)
-        throws ConfigException, IOException
-    {
+    protected void initializeAndRun(String[] args) throws ConfigException, IOException {
         try {
             ManagedUtil.registerLog4jMBeans();
         } catch (JMException e) {
@@ -106,18 +104,15 @@ public class ZooKeeperServerMain {
             // Registers shutdown handler which will be used to know the
             // server error or shutdown state changes.
             final CountDownLatch shutdownLatch = new CountDownLatch(1);
-            zkServer.registerServerShutdownHandler(
-                    new ZooKeeperServerShutdownHandler(shutdownLatch));
+            zkServer.registerServerShutdownHandler(new ZooKeeperServerShutdownHandler(shutdownLatch));
 
-            txnLog = new FileTxnSnapLog(new File(config.dataLogDir), new File(
-                    config.dataDir));
+            txnLog = new FileTxnSnapLog(new File(config.dataLogDir), new File(config.dataDir));
             zkServer.setTxnLogFactory(txnLog);
             zkServer.setTickTime(config.tickTime);
             zkServer.setMinSessionTimeout(config.minSessionTimeout);
             zkServer.setMaxSessionTimeout(config.maxSessionTimeout);
             cnxnFactory = ServerCnxnFactory.createFactory();
-            cnxnFactory.configure(config.getClientPortAddress(),
-                    config.getMaxClientCnxns());
+            cnxnFactory.configure(config.getClientPortAddress(),config.getMaxClientCnxns());
             cnxnFactory.startup(zkServer);
             // Watch status of ZooKeeper server. It will do a graceful shutdown
             // if the server is not running or hits an internal error.
