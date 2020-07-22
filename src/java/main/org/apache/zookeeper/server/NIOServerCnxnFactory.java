@@ -61,9 +61,9 @@ public class NIOServerCnxnFactory extends ServerCnxnFactory implements Runnable 
      * only allocate it once.
     */
     final ByteBuffer directBuffer = ByteBuffer.allocateDirect(64 * 1024);
-
+    // 存储单个客户端与服务器之间的连接
     final HashMap<InetAddress, Set<NIOServerCnxn>> ipMap = new HashMap<InetAddress, Set<NIOServerCnxn>>( );
-
+    // 单个客户端与单台服务器之间的连接数的限制, 仅仅是单台客户端机器与单台ZK服务器之间的连接数限制
     int maxClientCnxns = 60;
 
     /**
@@ -172,8 +172,7 @@ public class NIOServerCnxnFactory extends ServerCnxnFactory implements Runnable 
         }
     }
 
-    protected NIOServerCnxn createConnection(SocketChannel sock,
-            SelectionKey sk) throws IOException {
+    protected NIOServerCnxn createConnection(SocketChannel sock, SelectionKey sk) throws IOException {
         return new NIOServerCnxn(zkServer, sock, sk, this);
     }
 
