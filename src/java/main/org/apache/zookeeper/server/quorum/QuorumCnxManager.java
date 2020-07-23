@@ -346,6 +346,7 @@ public class QuorumCnxManager {
         authLearner.authenticate(sock, view.get(sid).hostname);
 
         // If lost the challenge, then drop the new connection
+        // 防止重复建立连接，myid大的主动连接myid小的
         if (sid > this.mySid) {
             LOG.info("Have smaller server identifier, so dropping the " +
                      "connection: (" + sid + ", " + this.mySid + ")");

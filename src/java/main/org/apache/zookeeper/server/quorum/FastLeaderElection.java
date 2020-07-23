@@ -496,6 +496,7 @@ public class FastLeaderElection implements Election {
 
     QuorumPeer self;
     Messenger messenger;
+    // 逻辑时钟，记录当前服务器参与过选举的轮次，可以看做是等于electionEpoch
     AtomicLong logicalclock = new AtomicLong(); /* Election instance */
     long proposedLeader;
     long proposedZxid;
