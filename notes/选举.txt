@@ -11,17 +11,26 @@ ZXID表示,64位数字,由Leader统一分配,全局唯一,不断递增
 
 
 
-1、org.apache.zookeeper.server.quorum.QuorumCnxManager
+1、org.apache.zookeeper.server.quorum.QuorumCnxManager(传输层)
     实现领导选举中的网络连接管理功能。
     它为每一对节点维护唯一的一个连接，在两个节点都启动申请连接时，只有sid大的一方才会申请连接成功。
     qcm对每个节点维护一个消息发送队列
 
-    属于传输层
     public final ArrayBlockingQueue<Message> recvQueue; //本节点的消息接收队列
     final ConcurrentHashMap<Long, SendWorker> senderWorkerMap;//对每一个远程节点都会定义一个SendWorker
     ConcurrentHashMap<Long, ArrayBlockingQueue<ByteBuffer>> queueSendMap;//每个远程节点都会定义一个消息发型队
 
-2、org.apache.zookeeper.server.quorum.FastLeaderElection
+    org.apache.zookeeper.server.quorum.QuorumCnxManager.Listener  监听选举端口
+    org.apache.zookeeper.server.quorum.QuorumCnxManager.SendWorker 用来向其他服务器发送选票信息
+    org.apache.zookeeper.server.quorum.QuorumCnxManager.RecvWorker 用来接收选票
+
+
+2、org.apache.zookeeper.server.quorum.FastLeaderElection(应用层)
     LinkedBlockingQueue<ToSend> sendqueue;
     LinkedBlockingQueue<Notification> recvqueue;
-    属于应用层，也有两个队列和两个线程
+    也有两个队列和两个线程
+
+    构造FastLeaderElection对象时，会对sendqueue、recvqueue队列进行初始化，并且运行Messenger.WorkerSender与Messenger.WorkerReceiver线程
+    由Messenger.WorkerSender发送到传输层queueSendMap中。
+    由Messenger.WorkerReceiver负责从传输层获取数据并放入recvqueue中
+    在应用层，只需要将待发送的选票信息添加到sendqueue中即可完成选票信息发送，或者从recvqueue中获取元素即可得到选票信息。

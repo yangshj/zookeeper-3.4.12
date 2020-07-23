@@ -24,10 +24,10 @@ import org.slf4j.LoggerFactory;
 
 
 public class Vote {
+
     private static final Logger LOG = LoggerFactory.getLogger(Vote.class);
     
-    public Vote(long id, 
-                    long zxid) {
+    public Vote(long id, long zxid) {
         this.version = 0x0;
         this.id = id;
         this.zxid = zxid;
@@ -36,9 +36,7 @@ public class Vote {
         this.state = ServerState.LOOKING;
     }
     
-    public Vote(long id, 
-                    long zxid, 
-                    long peerEpoch) {
+    public Vote(long id, long zxid, long peerEpoch) {
         this.version = 0x0;
         this.id = id;
         this.zxid = zxid;
@@ -47,10 +45,7 @@ public class Vote {
         this.state = ServerState.LOOKING;
     }
 
-    public Vote(long id, 
-                    long zxid, 
-                    long electionEpoch, 
-                    long peerEpoch) {
+    public Vote(long id, long zxid, long electionEpoch, long peerEpoch) {
         this.version = 0x0;
         this.id = id;
         this.zxid = zxid;
@@ -59,12 +54,7 @@ public class Vote {
         this.state = ServerState.LOOKING;
     }
     
-    public Vote(int version,
-                    long id, 
-                    long zxid, 
-                    long electionEpoch, 
-                    long peerEpoch, 
-                    ServerState state) {
+    public Vote(int version,long id,long zxid,long electionEpoch,long peerEpoch,ServerState state) {
         this.version = version;
         this.id = id;
         this.zxid = zxid;
@@ -87,41 +77,37 @@ public class Vote {
     }
     
     final private int version;
-    
+    // 被推荐leader的sid
     final private long id;
-    
+    // 被推荐leand的zxid
     final private long zxid;
-    
+    // 逻辑时钟，用来判断是不是在同一个投票轮次；发起新一轮投票时+1
     final private long electionEpoch;
-    
+    // 被推举的Leader的epoch，即zxid的高32位，每次Leader选举完成后递增
     final private long peerEpoch;
-    
+    // 当前服务器的状态，枚举：LOOKING, FOLLOWING, LEADING, OBSERVING
+    final private ServerState state;
+
     public int getVersion() {
         return version;
     }
-    
     public long getId() {
         return id;
     }
-
     public long getZxid() {
         return zxid;
     }
-
     public long getElectionEpoch() {
         return electionEpoch;
     }
-
     public long getPeerEpoch() {
         return peerEpoch;
     }
-
     public ServerState getState() {
         return state;
     }
 
-    final private ServerState state;
-    
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Vote)) {

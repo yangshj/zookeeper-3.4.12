@@ -426,8 +426,7 @@ public class QuorumCnxManager {
         }
     }
 
-    private void handleConnection(Socket sock, DataInputStream din)
-            throws IOException {
+    private void handleConnection(Socket sock, DataInputStream din) throws IOException {
         Long sid = null;
         try {
             // Read server id
@@ -470,6 +469,8 @@ public class QuorumCnxManager {
         authServer.authenticate(sock, din);
 
         //If wins the challenge, then close the new connection.
+        // 接收连接时，要求自己sid小，完成SendWorker和ReceiveWorker的构造以及线程启动，否则close
+        // 单向连接，只能由大的连小的
         if (sid < this.mySid) {
             /*
              * This replica might still believe that the connection to sid is
@@ -490,6 +491,7 @@ public class QuorumCnxManager {
 
             // Otherwise start worker threads to receive data.
         } else {
+            // 每接收一个连接，就创建一个SendWorker和RecvWorker
             SendWorker sw = new SendWorker(sock, sid);
             RecvWorker rw = new RecvWorker(sock, din, sid, sw);
             sw.setRecv(rw);
@@ -498,7 +500,7 @@ public class QuorumCnxManager {
             
             if(vsw != null)
                 vsw.finish();
-            
+            // 放到map中，为每台机器维护一个发送线程和接收线程
             senderWorkerMap.put(sid, sw);
             queueSendMap.putIfAbsent(sid, new ArrayBlockingQueue<ByteBuffer>(SEND_CAPACITY));
             
@@ -729,16 +731,13 @@ public class QuorumCnxManager {
                     ss = new ServerSocket();
                     ss.setReuseAddress(true);
                     if (listenOnAllIPs) {
-                        int port = view.get(QuorumCnxManager.this.mySid)
-                            .electionAddr.getPort();
+                        int port = view.get(QuorumCnxManager.this.mySid).electionAddr.getPort();
                         addr = new InetSocketAddress(port);
                     } else {
-                        addr = view.get(QuorumCnxManager.this.mySid)
-                            .electionAddr;
+                        addr = view.get(QuorumCnxManager.this.mySid).electionAddr;
                     }
                     LOG.info("My election bind port: " + addr.toString());
-                    setName(view.get(QuorumCnxManager.this.mySid)
-                            .electionAddr.toString());
+                    setName(view.get(QuorumCnxManager.this.mySid).electionAddr.toString());
                     ss.bind(addr);
                     while (!shutdown) {
                         Socket client = ss.accept();
@@ -1022,6 +1021,7 @@ public class QuorumCnxManager {
                     byte[] msgArray = new byte[length];
                     din.readFully(msgArray, 0, length);
                     ByteBuffer message = ByteBuffer.wrap(msgArray);
+                    // 添加到接收队列，后续业务层的接收线程WorkerReceiver会来拿消息
                     addToRecvQueue(new Message(message.duplicate(), sid));
                 }
             } catch (Exception e) {
