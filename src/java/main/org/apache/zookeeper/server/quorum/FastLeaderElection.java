@@ -659,31 +659,27 @@ public class FastLeaderElection implements Election {
      * electing over and over a peer that has crashed and it is no
      * longer leading.
      *
+     * 如果自己不是leader，那么一定要收到过Leader的信息，即收到Leader信息，并且leader的回复信息中宣称自己的状态是ServerState.LEADING
+     * 如果自己是leader，那么当前logicalclock一定要等于选票信息中的electionEpoch
+     *
      * @param votes set of votes
      * @param   leader  leader id
      * @param   electionEpoch   epoch id
      */
-    protected boolean checkLeader(
-            HashMap<Long, Vote> votes,
-            long leader,
-            long electionEpoch){
-
+    protected boolean checkLeader(HashMap<Long, Vote> votes,long leader,long electionEpoch){
         boolean predicate = true;
-
         /*
          * If everyone else thinks I'm the leader, I must be the leader.
          * The other two checks are just for the case in which I'm not the
          * leader. If I'm not the leader and I haven't received a message
          * from leader stating that it is leading, then predicate is false.
          */
-
         if(leader != self.getId()){
             if(votes.get(leader) == null) predicate = false;
             else if(votes.get(leader).getState() != ServerState.LEADING) predicate = false;
         } else if(logicalclock.get() != electionEpoch) {
             predicate = false;
         } 
-
         return predicate;
     }
     
@@ -810,7 +806,7 @@ public class FastLeaderElection implements Election {
         try {
             // 投票箱，key:其它服务器的sid，value:vote
             HashMap<Long, Vote> recvset = new HashMap<Long, Vote>();
-
+            // 用来记录选举逻辑之外的选票，例如当一个服务器加入zookeeper集群时，因为集群已经存在，不用重新选举，只需要在满足一定条件下加入集群即可
             HashMap<Long, Vote> outofelection = new HashMap<Long, Vote>();
 
             int notTimeout = finalizeWait;

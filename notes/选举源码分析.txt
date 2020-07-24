@@ -1,3 +1,6 @@
+
+
+
 一、org.apache.zookeeper.server.quorum.FastLeaderElection.Messenger.WorkerReceiver
 	1、从manager的 recvQueue 队列中获取一个消息
 	2、如果发送方是Observer
@@ -142,3 +145,24 @@
 						1、如果结束，修改自己的状态并返回投票结果，更新逻辑时钟 logicalclock
 						2、清空队列 recvqueue
 						3、将本服务器最终的票返回
+	
+	
+	
+	
+e)   选票有效性验证
+leader候选人获得超过半数的选票。
+通过Leader有效性校验。
+ 
+
+f)   Leader有效性验证
+如果自己不是leader，那么一定要收到过Leader的信息，即收到Leader信息，并且leader的回复信息中宣称自己的状态是ServerState.LEADING
+如果自己是leader，那么当前logicalclock一定要等于选票信息中的electionEpoch
+	
+	
+	
+	
+	
+	
+	
+	
+	

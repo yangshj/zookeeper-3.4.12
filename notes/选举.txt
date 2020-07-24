@@ -7,7 +7,13 @@ FOLLOWING: 跟随者,Leader已经选举出来,表明当前服务角色为Follower
 OBSERVER: 观察者状态, 表明当前服务角色为Observer
 
 二、事务ID:
-ZXID表示,64位数字,由Leader统一分配,全局唯一,不断递增
+    1、zxid
+        事务id，事务请求的唯一标记，由leader服务器负责进行分配。
+        高32位是peerEpoch，低32位是请求的计数，从0开始。
+    2、peerEpoch
+        每次leader选举完成之后，都会选举出一个新的peerEpoch，用来标记事务请求所属的轮次。
+    3、electionEpoch
+        每次leader选举，electionEpoch就会自增1，统计选票信息时，首先保证electionEpoch相同
 
 
 
