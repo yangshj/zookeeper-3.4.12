@@ -1,4 +1,3 @@
-
 一、org.apache.zookeeper.server.quorum.FastLeaderElection.Messenger.WorkerReceiver
 	1、从manager的 recvQueue 队列中获取一个消息
 	2、如果发送方是Observer
@@ -12,8 +11,8 @@
 			2、如果发送此消息的方也在LOOKING，并且其逻辑时钟落后，则发送通知
 		5、否则
 			对方server在LOOKING中，则向其发送当前的选举结果，当有server加入一个assemble时有用
-
-
+			
+			
 二、org.apache.zookeeper.server.quorum.FastLeaderElection.Messenger.WorkerSender
 	1、从 sendqueue 队列取一个消息，类型为 ToSend
 	2、开始处理消息
@@ -28,15 +27,118 @@
 						1、从 view 中获取sid的服务器地址
 						2、创建socket对象
 						3、开始初始化连接
-							1、获取输出流，并发送 sid
+							1、获取输出流，并发送 sid 
 							2、获取 输入流
 							3、authenticate learner
 							4、如果sid > 本机sid
 								直接关掉连接，防止重复建立连接，myid大的主动连接myid小的
-							5、否则
+							5、否则 
 								1、创建 SendWorker RecvWorker 两个线程
 								2、sw.setRecv(rw) 把接收线程设置到发送线程中 ？
 								3、如果 senderWorkerMap 中已经存在 sid 的 SendWorker, 直接关掉
 								4、将新创建的 SendWorker 放入到 senderWorkerMap
 								5、初始化 sid 队列放入到 queueSendMap
 								6、启动两个线程
+			
+			
+			
+三、org.apache.zookeeper.server.quorum.QuorumPeerMain#main
+	1、创建 QuorumPeerMain mian
+	2、调用main的初始化和运行方法
+		1、如果参数长度等于1 解析参数 QuorumPeerConfig
+		2、启动一个定时清除日志的任务
+		3、如果参数长度等于1，且参数中的servers集合大于0
+			1、启动集群模式
+				1、初始化客户端与服务端的网络通信处理类 ServerCnxnFactory				
+				2、创建并初始化 quorumPeer
+				3、启动 quorumPeer
+					1、从事务日志目录dataLogDir和数据快照目录dataDir中恢复出DataTree数据 
+					2、开启对客户端的连接端口,启动ServerCnxnFactory主线程
+					3、创建出选举算法, 初始化
+						1、先投给自己 currentVote=自己
+						2、从配置中拿自己的选举地址，赋值给 myQuorumAddr
+						3、根据配置，获取选举算法
+							1、创建leader选举IO负责类, QuorumCnxManager qcm
+								1、初始化成员变量
+									1、senderWorkerMap  对每一个远程节点都会定义一个SendWorker
+									2、recvQueue  本节点的消息接收队列
+									3、queueSendMap 每个远程节点都会定义一个消息发型队
+									4、lastMessageSent 为每个SID保留最近发送过的一个消息
+									注意，接收线程在sendWork里面
+								2、创建监听器 Listener 
+							2、启动监听器, 等待集群其他机器连接
+							3、创建基于TCP的选举算法 FastLeaderElection
+					4、启动 quorumPeer 线程 
+				4、join quorumPeer
+		4、否则
+			1、启动单机模式
+	3、退出程序
+	
+	
+	
+	
+四、org.apache.zookeeper.server.quorum.QuorumPeer#run	
+	1、注册到Mbean
+	2、while 循环
+		1、LOOKING
+			开始选举，调用 lookForLeader 方法
+		2、OBSERVING
+			
+		3、FOLLOWING
+		4、LEADING
+	
+	
+	
+	
+	
+	
+五、org.apache.zookeeper.server.quorum.FastLeaderElection#lookForLeader	
+	1、初始化信息
+		投票箱，key:其它服务器的sid，value:vote
+		HashMap<Long, Vote> recvset = new HashMap<Long, Vote>();
+		HashMap<Long, Vote> outofelection = new HashMap<Long, Vote>();
+	2、逻辑时钟+1  logicalclock
+	3、更新提议为自己
+	4、启动时先投给自己 给所有参与投票的机器发送通知
+		封装 ToSend , 放入 sendqueue 队列
+	5、主循环，直到选出leader
+		1、从 recvqueue 里拿到投票消息，自己的投票也在这里处理
+		2、如果接收到的消息为空 ？
+			1、消息发完了，继续发送，一直到选出leader为止
+			2、消息还在，可能其他server还没启动，尝试连接
+		3、收到了投票消息
+			switch 投票服务器的状态
+			1、LOOKING
+				1、如果接收到的投票轮次比自己高
+					1、设置自己的时钟为选票的时钟
+					2、清空自己的选票
+					3、比较选票对应的服务器和本机，如果选票对应的服务器更新，就更新投票为选票所对应的服务器
+					4、否则就投给自己
+					5、发送投票
+				2、接收到选票小于自己的时钟
+					放弃
+				3、如果 比较选票对应的服务器和本机，如果选票对应的服务器更新
+					更新投票为选票所对应的服务器
+					发送投票
+				4、保存自己接收到的选票 到 recvset 中
+				5、 根据接收到的选票，以及自己的投票，来判断能不能成为leader, 如果满足过半验证
+					1、循环等待200毫秒，获取投票消息，看领导者是否有变动
+						将收到的选票，放到 recvqueue， break，退出循环
+					2、如果没有获得选票了，那么leader也就选出来了
+						1、如果选出的是自己，就将自己设置为leading，如果是其它服务器，就将自己设为对应的状态
+						2、将本服务器最终的票返回
+						3、清空队列 recvqueue
+			2、OBSERVING 不参与选举 
+				break
+			3、FOLLOWING LEADING 参与选举
+				1、如果是同一轮选举
+					1、加入到本机的投票集合
+					2、投票是否结束，如果结束，再确认LEADER是否有效
+						1、如果结束，修改自己的状态并返回投票结果
+						2、清空队列 recvqueue
+						3、将本服务器最终的票返回
+				2、将投票加入到 outofelection
+					1、投票是否结束，如果结束，再确认LEADER是否有效
+						1、如果结束，修改自己的状态并返回投票结果，更新逻辑时钟 logicalclock
+						2、清空队列 recvqueue
+						3、将本服务器最终的票返回

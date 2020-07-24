@@ -829,15 +829,13 @@ public class FastLeaderElection implements Election {
              * Loop in which we exchange notifications until we find a leader
              */
             //主循环，直到选出leader
-            while ((self.getPeerState() == ServerState.LOOKING) &&
-                    (!stop)){
+            while ((self.getPeerState()==ServerState.LOOKING) && (!stop)){
                 /*
                  * Remove next notification from queue, times out after 2 times
                  * the termination time
                  */
                 //从IO线程里拿到投票消息，自己的投票也在这里处理
-                Notification n = recvqueue.poll(notTimeout,
-                        TimeUnit.MILLISECONDS);
+                Notification n = recvqueue.poll(notTimeout, TimeUnit.MILLISECONDS);
 
                 /*
                  * Sends more notifications if haven't received enough.
@@ -872,10 +870,9 @@ public class FastLeaderElection implements Election {
                         // If notification > current, replace and send messages out
                         if (n.electionEpoch > logicalclock.get()) { // 如果接收到的投票轮次比自己高
                             logicalclock.set(n.electionEpoch); // 设置自己的时钟为选票的时钟
-                            recvset.clear(); // 清空自己的选票
+                            recvset.clear(); // 清自己空的选票
                             // 比较选票对应的服务器和本机，如果选票对应的服务器更新，就更新投票为选票所对应的服务器
-                            if(totalOrderPredicate(n.leader, n.zxid, n.peerEpoch,
-                                    getInitId(), getInitLastLoggedZxid(), getPeerEpoch())) {
+                            if(totalOrderPredicate(n.leader, n.zxid, n.peerEpoch, getInitId(), getInitLastLoggedZxid(), getPeerEpoch())) {
                                 updateProposal(n.leader, n.zxid, n.peerEpoch);
                             } else {
                                 // 否则投给自己
@@ -893,10 +890,10 @@ public class FastLeaderElection implements Election {
                                         + ", logicalclock=0x" + Long.toHexString(logicalclock.get()));
                             }
                             break;
-                        } else if (totalOrderPredicate(n.leader, n.zxid, n.peerEpoch,
-                                proposedLeader, proposedZxid, proposedEpoch)) {
+                        } else if (totalOrderPredicate(n.leader, n.zxid, n.peerEpoch, proposedLeader, proposedZxid, proposedEpoch)) {
                             // 如果时钟相等，同样比较谁的服务器更新
                             updateProposal(n.leader, n.zxid, n.peerEpoch);
+                            // 发送投票
                             sendNotifications();
                         }
 
@@ -913,9 +910,7 @@ public class FastLeaderElection implements Election {
                             // 如果符合过半验证，本台服务器就认为选出了leader
                             // Verify if there is any change in the proposed leader
                             while((n = recvqueue.poll(finalizeWait, TimeUnit.MILLISECONDS)) != null){
-
-                                if(totalOrderPredicate(n.leader, n.zxid, n.peerEpoch,
-                                        proposedLeader, proposedZxid, proposedEpoch)){
+                                if(totalOrderPredicate(n.leader, n.zxid, n.peerEpoch, proposedLeader, proposedZxid, proposedEpoch)){
                                     recvqueue.put(n);
                                     break;
                                 }
@@ -940,7 +935,7 @@ public class FastLeaderElection implements Election {
                             }
                         }
                         break;
-                    //OBSERVING机器不参数选举
+                    //OBSERVING机器不参与选举
                     case OBSERVING:
                         LOG.debug("Notification from observer: " + n.sid);
                         break;

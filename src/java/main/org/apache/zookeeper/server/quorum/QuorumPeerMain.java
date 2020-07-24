@@ -130,12 +130,13 @@ public class QuorumPeerMain {
   
       LOG.info("Starting quorum peer");
       try {
+          // 初始化客户端与服务端的网络通信处理类
           ServerCnxnFactory cnxnFactory = ServerCnxnFactory.createFactory();
           cnxnFactory.configure(config.getClientPortAddress(),
                                 config.getMaxClientCnxns());
 
+          // //zk的逻辑主线程，负责选举，投票等
           quorumPeer = getQuorumPeer();
-
           quorumPeer.setQuorumPeers(config.getServers());
           quorumPeer.setTxnFactory(new FileTxnSnapLog(
                   new File(config.getDataLogDir()),
