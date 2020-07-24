@@ -1,0 +1,42 @@
+
+一、org.apache.zookeeper.server.quorum.FastLeaderElection.Messenger.WorkerReceiver
+	1、从manager的 recvQueue 队列中获取一个消息
+	2、如果发送方是Observer
+		则返回当前选举结果
+	3、否则
+		1、检查向后兼容性
+		2、若容量为28，则表示可向后兼容
+		3、将接收到的消息，转换为 Notification 对象
+		4、如果自己也在LOOKING
+			1、将对方发送的消息放入业务接收队列 recvqueue, 选举主线程会消费该消息
+			2、如果发送此消息的方也在LOOKING，并且其逻辑时钟落后，则发送通知
+		5、否则
+			对方server在LOOKING中，则向其发送当前的选举结果，当有server加入一个assemble时有用
+
+
+二、org.apache.zookeeper.server.quorum.FastLeaderElection.Messenger.WorkerSender
+	1、从 sendqueue 队列取一个消息，类型为 ToSend
+	2、开始处理消息
+		1、将 ToSend 转换为 ByteBuffer
+		2、调用 manager 的发送方法
+			1、如果消息的sid = 本机的sid
+				直接将消息添加到接收者队列 recvQueue , 不走网络层
+			2、否则
+				1、构建队列，放到 queueSendMap 中
+				2、尝试与id为sid的服务器建立连接
+					1、如果 senderWorkerMap 不包含连接sid
+						1、从 view 中获取sid的服务器地址
+						2、创建socket对象
+						3、开始初始化连接
+							1、获取输出流，并发送 sid
+							2、获取 输入流
+							3、authenticate learner
+							4、如果sid > 本机sid
+								直接关掉连接，防止重复建立连接，myid大的主动连接myid小的
+							5、否则
+								1、创建 SendWorker RecvWorker 两个线程
+								2、sw.setRecv(rw) 把接收线程设置到发送线程中 ？
+								3、如果 senderWorkerMap 中已经存在 sid 的 SendWorker, 直接关掉
+								4、将新创建的 SendWorker 放入到 senderWorkerMap
+								5、初始化 sid 队列放入到 queueSendMap
+								6、启动两个线程

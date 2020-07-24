@@ -329,6 +329,7 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
     
     /**
      * ... and its counterpart for backward compatibility
+     * œÚ∫ÛºÊ»›
      */
     volatile private Vote bcVote;
         

@@ -324,8 +324,7 @@ public class QuorumCnxManager {
         }
     }
 
-    private boolean startConnection(Socket sock, Long sid)
-            throws IOException {
+    private boolean startConnection(Socket sock, Long sid) throws IOException {
         DataOutputStream dout = null;
         DataInputStream din = null;
         try {
@@ -544,7 +543,7 @@ public class QuorumCnxManager {
     
     /**
      * Try to establish a connection to server with id sid.
-     * 
+     * 尝试与id为sid的服务器建立连接
      *  @param sid  server id
      */
     synchronized public void connectOne(long sid){
@@ -1120,9 +1119,9 @@ public class QuorumCnxManager {
      */
     public void addToRecvQueue(Message msg) {
         synchronized(recvQLock) {
-            if (recvQueue.remainingCapacity() == 0) {
+            if (recvQueue.remainingCapacity() == 0) { // 如果没有空余空间
                 try {
-                    recvQueue.remove();
+                    recvQueue.remove(); //会强制把第一条消息删掉
                 } catch (NoSuchElementException ne) {
                     // element could be removed by poll()
                      LOG.debug("Trying to remove from an empty " +
