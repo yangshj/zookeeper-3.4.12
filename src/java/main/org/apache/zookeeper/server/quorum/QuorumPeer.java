@@ -990,7 +990,9 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
                 case FOLLOWING:
                     try {
                         LOG.info("FOLLOWING");
+                        // 初始化Follower对象
                         setFollower(makeFollower(logFactory));
+                        // follow动作，线程在此等待
                         follower.followLeader();
                     } catch (Exception e) {
                         LOG.warn("Unexpected exception",e);
@@ -1003,7 +1005,9 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
                 case LEADING:
                     LOG.info("LEADING");
                     try {
+                        // 初始化Leader对象
                         setLeader(makeLeader(logFactory));
+                        // lead动作，线程在这里阻塞
                         leader.lead();
                         setLeader(null);
                     } catch (Exception e) {

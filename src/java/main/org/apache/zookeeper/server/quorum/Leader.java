@@ -377,16 +377,19 @@ public class Leader {
 
         try {
             self.tick.set(0);
+            //从本地文件恢复数据
             zk.loadData();
             
             leaderStateSummary = new StateSummary(self.getCurrentEpoch(), zk.getLastProcessedZxid());
 
             // Start thread that waits for connection requests from 
             // new followers.
+            //启动lead端口的监听线程，专门用来监听新的follower
             cnxAcceptor = new LearnerCnxAcceptor();
             cnxAcceptor.start();
             
             readyToStart = true;
+            // 等待足够多的follower进来，代表自己确实是leader，此处lead线程可能会等待
             long epoch = getEpochToPropose(self.getId(), self.getAcceptedEpoch());
             
             zk.setZxid(ZxidUtils.makeZxid(epoch, 0));
