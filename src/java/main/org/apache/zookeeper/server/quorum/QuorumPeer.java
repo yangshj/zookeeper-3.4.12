@@ -806,6 +806,11 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
     }
      
     protected Leader makeLeader(FileTxnSnapLog logFactory) throws IOException {
+        /*
+         * 创建Leader对象，并且创建了LeaderZooKeeperServer对象(该对象主要是处理客户端
+         * 请求、或者Follower转发的事务请求，采用责任链的方式，后面单独那一篇出来讲解
+         * 请求的执行)
+         */
         return new Leader(this, new LeaderZooKeeperServer(logFactory,
                 this,new ZooKeeperServer.BasicDataTreeBuilder(), this.zkDb));
     }
@@ -992,7 +997,13 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
                         LOG.info("FOLLOWING");
                         // 初始化Follower对象
                         setFollower(makeFollower(logFactory));
-                        // follow动作，线程在此等待
+                        /*
+                         * 这里会进行一个死循环，主要做的逻辑有
+                         * 1、连接Leader
+                         * 2、和Leader进行数据同步
+                         * 3、同步完毕后，正常接收Leader的请求，并且执行对应的逻辑，
+                         * 包括Request、Propose、Commit等请求
+                         */
                         follower.followLeader();
                     } catch (Exception e) {
                         LOG.warn("Unexpected exception",e);
@@ -1007,7 +1018,13 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
                     try {
                         // 初始化Leader对象
                         setLeader(makeLeader(logFactory));
-                        // lead动作，线程在这里阻塞
+                        /*
+                         * 这里会进行一个死循环，主要做的逻辑有
+                         * 1、接受Follower的连接
+                         * 2、进行Follower进行数据同步
+                         * 3、同步完成后，正常接收请求（主要包括客户端发来的请求、
+                         * 集群Follower转发的事务请求等等）
+                         */
                         leader.lead();
                         setLeader(null);
                     } catch (Exception e) {

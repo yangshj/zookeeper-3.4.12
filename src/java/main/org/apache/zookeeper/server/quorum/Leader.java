@@ -385,13 +385,16 @@ public class Leader {
             // Start thread that waits for connection requests from 
             // new followers.
             //启动lead端口的监听线程，专门用来监听新的follower
+            // 创建一个线程，接收Follower/Observer的连接
             cnxAcceptor = new LearnerCnxAcceptor();
             cnxAcceptor.start();
             
             readyToStart = true;
-            // 等待足够多的follower进来，代表自己确实是leader，此处lead线程可能会等待
+            // 等待超过一半的(Follower和Observer)连接，这里才会往下执行，返回新的朝代epoch
+            // 反之，阻塞在这里
             long epoch = getEpochToPropose(self.getId(), self.getAcceptedEpoch());
-            
+
+            // 根据新的epoch，设置新的起始zxid
             zk.setZxid(ZxidUtils.makeZxid(epoch, 0));
             
             synchronized(this){
@@ -399,22 +402,25 @@ public class Leader {
             }
 
             //发起一个NEWLEADER投票
-            newLeaderProposal.packet = new QuorumPacket(NEWLEADER, zk.getZxid(),
-                    null, null);
-
+            newLeaderProposal.packet = new QuorumPacket(NEWLEADER, zk.getZxid(),null, null);
 
             if ((newLeaderProposal.packet.getZxid() & 0xffffffffL) != 0) {
                 LOG.info("NEWLEADER proposal has Zxid of "
                         + Long.toHexString(newLeaderProposal.packet.getZxid()));
             }
-            
+
+            // 等待超过一半的(Follower和Observer)获取了新的epoch，并且返回了Leader.ACKEPOCH
+            // 这里才会往下执行。 反之，阻塞在这里
             waitForEpochAck(self.getId(), leaderStateSummary);
+            // 设置当前新的朝代epoch
             self.setCurrentEpoch(epoch);
 
             // We have to get at least a majority of servers in sync with
             // us. We do this by waiting for the NEWLEADER packet to get
             // acknowledged
             try {
+                // 等待超过一半的(Follower和Observer)进行数据同步成功，并且返回了Leader.ACK
+                // 这里才会往下执行。 反之，阻塞在这里
                 waitForNewLeaderAck(self.getId(), zk.getZxid(), LearnerType.PARTICIPANT);
             } catch (InterruptedException e) {
                 shutdown("Waiting for a quorum of followers, only synced with sids: [ "
@@ -431,7 +437,8 @@ public class Leader {
                 self.tick.incrementAndGet();
                 return;
             }
-            
+            // 走到这里说明集群中数据已经同步完成，可以正常运行
+            // 开启zkServer，并且同时开启请求调用链接收请求执行
             startZkServer();
             
             /**
@@ -465,7 +472,8 @@ public class Leader {
             // We ping twice a tick, so we only update the tick every other
             // iteration
             boolean tickSkip = true;
-    
+
+            // 进行一个死循环，每次休眠self.tickTime / 2，和对所有的(Observer/Follower)发起心跳检测
             while (true) {
                 Thread.sleep(self.tickTime / 2);
                 if (!tickSkip) {
@@ -490,17 +498,17 @@ public class Leader {
                     shutdown("Unexpected internal error");
                     return;
                 }
-
-              if (!tickSkip && !self.getQuorumVerifier().containsQuorum(syncedSet)) {
-                //if (!tickSkip && syncedCount < self.quorumPeers.size() / 2) {
+                // 判断是否有超过一半Follower在集群中
+                if (!tickSkip && !self.getQuorumVerifier().containsQuorum(syncedSet)) {
+                    //if (!tickSkip && syncedCount < self.quorumPeers.size() / 2) {
                     // Lost quorum, shutdown
                     shutdown("Not sufficient followers synced, only synced with sids: [ "
                             + getSidSetString(syncedSet) + " ]");
                     // make sure the order is the same!
                     // the leader goes to looking
-                    return;
-              } 
-              tickSkip = !tickSkip;
+                   return;
+                }
+                tickSkip = !tickSkip;
             }
         } finally {
             zk.unregisterJMX(this);
@@ -723,7 +731,6 @@ public class Leader {
     
     /**
      * Create an inform packet and send it to all observers.
-     * @param zxid
      * @param proposal
      */
     public void inform(Proposal proposal) {   
