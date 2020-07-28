@@ -397,7 +397,8 @@ public class Leader {
             synchronized(this){
                 lastProposed = zk.getZxid();
             }
-            
+
+            //发起一个NEWLEADER投票
             newLeaderProposal.packet = new QuorumPacket(NEWLEADER, zk.getZxid(),
                     null, null);
 
@@ -883,12 +884,13 @@ public class Leader {
             }
             connectingFollowers.add(sid);
             QuorumVerifier verifier = self.getQuorumVerifier();
-            if (connectingFollowers.contains(self.getId()) && 
-                                            verifier.containsQuorum(connectingFollowers)) {
+            //如果足够多的follower进入，选举有效，则无需等待，并通知其他的等待线程，类似于Barrier
+            if (connectingFollowers.contains(self.getId()) && verifier.containsQuorum(connectingFollowers)) {
                 waitingForNewEpoch = false;
                 self.setAcceptedEpoch(epoch);
                 connectingFollowers.notifyAll();
             } else {
+                //如果进入的follower不够，则进入等待，超时即为initLimit时间，
                 long start = Time.currentElapsedTime();
                 long cur = start;
                 long end = start + self.getInitLimit()*self.getTickTime();
@@ -896,6 +898,7 @@ public class Leader {
                     connectingFollowers.wait(end - cur);
                     cur = Time.currentElapsedTime();
                 }
+                //超时了，退出lead过程，重新发起选举
                 if (waitingForNewEpoch) {
                     throw new InterruptedException("Timeout while waiting for epoch from quorum");        
                 }
@@ -919,13 +922,16 @@ public class Leader {
                                                     + leaderStateSummary.getLastZxid()
                                                     + " (last zxid)");
                 }
+                //将follower添加到等待集合
                 electingFollowers.add(id);
             }
             QuorumVerifier verifier = self.getQuorumVerifier();
+            //判断是否满足选举条件，如果不满足进入等待，满足则通知其他等待线程，类似于Barrier
             if (electingFollowers.contains(self.getId()) && verifier.containsQuorum(electingFollowers)) {
                 electionFinished = true;
                 electingFollowers.notifyAll();
-            } else {                
+            } else {
+                //follower还不够，等等吧
                 long start = Time.currentElapsedTime();
                 long cur = start;
                 long end = start + self.getInitLimit()*self.getTickTime();
