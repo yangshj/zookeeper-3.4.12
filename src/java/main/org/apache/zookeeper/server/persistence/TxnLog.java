@@ -25,13 +25,13 @@ import org.apache.zookeeper.txn.TxnHeader;
 
 /**
  * Interface for reading transaction logs.
- *
+ * 该组件提供事务日志的序列化和反序列化
  */
 public interface TxnLog {
     
     /**
-     * roll the current
-     * log being appended to
+     * roll the current log being appended to
+     * 滚动日志,创建新的日志文件
      * @throws IOException 
      */
     void rollLog() throws IOException;
@@ -45,8 +45,8 @@ public interface TxnLog {
     boolean append(TxnHeader hdr, Record r) throws IOException;
 
     /**
-     * Start reading the transaction logs
-     * from a given zxid
+     * Start reading the transaction logs from a given zxid
+     * 创建一个迭代器,初始指向指定的zxid对应的事务记录,可向后迭代遍历
      * @param zxid
      * @return returns an iterator to read the 
      * next transaction in the logs.
@@ -56,14 +56,15 @@ public interface TxnLog {
     
     /**
      * the last zxid of the logged transactions.
+     * 获取当前记录的事务中最大的zxid
      * @return the last zxid of the logged transactions.
      * @throws IOException
      */
     long getLastLoggedZxid() throws IOException;
     
     /**
-     * truncate the log to get in sync with the 
-     * leader.
+     * truncate the log to get in sync with the leader.
+     * 将指定zxid后面的事务数据全部从文件中删除
      * @param zxid the zxid to truncate at.
      * @throws IOException 
      */

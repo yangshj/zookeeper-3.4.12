@@ -73,14 +73,18 @@ public class DataTree {
     private static final Logger LOG = LoggerFactory.getLogger(DataTree.class);
 
     /**
-     * This hashtable provides a fast lookup to the datanodes. The tree is the
-     * source of truth and is where all the locking occurs
+     * This hashtable provides a fast lookup to the datanodes. The tree is the source of truth and is where all the locking occurs
+     * node树(持久化)
+     * key为path, value为ZNode节点
      */
-    private final ConcurrentHashMap<String, DataNode> nodes =
-        new ConcurrentHashMap<String, DataNode>();
-
+    private final ConcurrentHashMap<String, DataNode> nodes = new ConcurrentHashMap<String, DataNode>();
+    /**
+     * 数据变化监视管理器
+     */
     private final WatchManager dataWatches = new WatchManager();
-
+    /**
+     * 子节点变化监视管理器
+     */
     private final WatchManager childWatches = new WatchManager();
 
     /** the root of zookeeper tree */
@@ -99,19 +103,21 @@ public class DataTree {
     private static final String quotaZookeeper = Quotas.quotaZookeeper;
 
     /** this will be the string thats stored as a child of /zookeeper */
-    private static final String quotaChildZookeeper = quotaZookeeper
-            .substring(procZookeeper.length() + 1);
+    private static final String quotaChildZookeeper = quotaZookeeper.substring(procZookeeper.length() + 1);
 
     /**
      * the path trie that keeps track fo the quota nodes in this datatree
+     * 路径查找树,用于path的快速检索.
+     * 内部保存开启配额检查的所有路径
      */
     private final PathTrie pTrie = new PathTrie();
 
+
     /**
-     * This hashtable lists the paths of the ephemeral nodes of a session.
+     * 临时节点列表
+     * key为sessionId,value为path集合
      */
-    private final Map<Long, HashSet<String>> ephemerals =
-        new ConcurrentHashMap<Long, HashSet<String>>();
+    private final Map<Long, HashSet<String>> ephemerals = new ConcurrentHashMap<Long, HashSet<String>>();
 
     private final ReferenceCountedACLCache aclCache = new ReferenceCountedACLCache();
 

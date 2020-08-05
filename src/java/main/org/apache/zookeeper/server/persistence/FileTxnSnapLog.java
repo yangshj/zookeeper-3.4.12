@@ -40,10 +40,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This is a helper class 
- * above the implementations 
- * of txnlog and snapshot 
- * classes
+ * This is a helper class above the implementations of txnlog and snapshot classes
+ *
+ * 该组件是SnapLog和TxnLog两个组件的门面,通过它可以完成根据快照文件和事务文件,重建内存数据最新状态的能力
  */
 public class FileTxnSnapLog {
     //the direcotry containing the 
