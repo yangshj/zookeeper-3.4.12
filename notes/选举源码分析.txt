@@ -1,162 +1,162 @@
 
 
 
-Ò»¡¢org.apache.zookeeper.server.quorum.FastLeaderElection.Messenger.WorkerReceiver
-	1¡¢´ÓmanagerµÄ recvQueue ¶ÓÁÐÖÐ»ñÈ¡Ò»¸öÏûÏ¢
-	2¡¢Èç¹û·¢ËÍ·½ÊÇObserver
-		Ôò·µ»Øµ±Ç°Ñ¡¾Ù½á¹û
-	3¡¢·ñÔò
-		1¡¢¼ì²éÏòºó¼æÈÝÐÔ
-		2¡¢ÈôÈÝÁ¿Îª28£¬Ôò±íÊ¾¿ÉÏòºó¼æÈÝ
-		3¡¢½«½ÓÊÕµ½µÄÏûÏ¢£¬×ª»»Îª Notification ¶ÔÏó
-		4¡¢Èç¹û×Ô¼ºÒ²ÔÚLOOKING
-			1¡¢½«¶Ô·½·¢ËÍµÄÏûÏ¢·ÅÈëÒµÎñ½ÓÊÕ¶ÓÁÐ recvqueue, Ñ¡¾ÙÖ÷Ïß³Ì»áÏû·Ñ¸ÃÏûÏ¢
-			2¡¢Èç¹û·¢ËÍ´ËÏûÏ¢µÄ·½Ò²ÔÚLOOKING£¬²¢ÇÒÆäÂß¼­Ê±ÖÓÂäºó£¬Ôò·¢ËÍÍ¨Öª
-		5¡¢·ñÔò
-			¶Ô·½serverÔÚLOOKINGÖÐ£¬ÔòÏòÆä·¢ËÍµ±Ç°µÄÑ¡¾Ù½á¹û£¬µ±ÓÐserver¼ÓÈëÒ»¸öassembleÊ±ÓÐÓÃ
+ä¸€ã€org.apache.zookeeper.server.quorum.FastLeaderElection.Messenger.WorkerReceiver
+	1ã€ä»Žmanagerçš„ recvQueue é˜Ÿåˆ—ä¸­èŽ·å–ä¸€ä¸ªæ¶ˆæ¯
+	2ã€å¦‚æžœå‘é€æ–¹æ˜¯Observer
+		åˆ™è¿”å›žå½“å‰é€‰ä¸¾ç»“æžœ
+	3ã€å¦åˆ™
+		1ã€æ£€æŸ¥å‘åŽå…¼å®¹æ€§
+		2ã€è‹¥å®¹é‡ä¸º28ï¼Œåˆ™è¡¨ç¤ºå¯å‘åŽå…¼å®¹
+		3ã€å°†æŽ¥æ”¶åˆ°çš„æ¶ˆæ¯ï¼Œè½¬æ¢ä¸º Notification å¯¹è±¡
+		4ã€å¦‚æžœè‡ªå·±ä¹Ÿåœ¨LOOKING
+			1ã€å°†å¯¹æ–¹å‘é€çš„æ¶ˆæ¯æ”¾å…¥ä¸šåŠ¡æŽ¥æ”¶é˜Ÿåˆ— recvqueue, é€‰ä¸¾ä¸»çº¿ç¨‹ä¼šæ¶ˆè´¹è¯¥æ¶ˆæ¯
+			2ã€å¦‚æžœå‘é€æ­¤æ¶ˆæ¯çš„æ–¹ä¹Ÿåœ¨LOOKINGï¼Œå¹¶ä¸”å…¶é€»è¾‘æ—¶é’Ÿè½åŽï¼Œåˆ™å‘é€é€šçŸ¥
+		5ã€å¦åˆ™
+			å¯¹æ–¹serveråœ¨LOOKINGä¸­ï¼Œåˆ™å‘å…¶å‘é€å½“å‰çš„é€‰ä¸¾ç»“æžœï¼Œå½“æœ‰serveråŠ å…¥ä¸€ä¸ªassembleæ—¶æœ‰ç”¨
 			
 			
-¶þ¡¢org.apache.zookeeper.server.quorum.FastLeaderElection.Messenger.WorkerSender
-	1¡¢´Ó sendqueue ¶ÓÁÐÈ¡Ò»¸öÏûÏ¢£¬ÀàÐÍÎª ToSend
-	2¡¢¿ªÊ¼´¦ÀíÏûÏ¢
-		1¡¢½« ToSend ×ª»»Îª ByteBuffer
-		2¡¢µ÷ÓÃ manager µÄ·¢ËÍ·½·¨
-			1¡¢Èç¹ûÏûÏ¢µÄsid = ±¾»úµÄsid
-				Ö±½Ó½«ÏûÏ¢Ìí¼Óµ½½ÓÊÕÕß¶ÓÁÐ recvQueue , ²»×ßÍøÂç²ã
-			2¡¢·ñÔò
-				1¡¢¹¹½¨¶ÓÁÐ£¬·Åµ½ queueSendMap ÖÐ
-				2¡¢³¢ÊÔÓëidÎªsidµÄ·þÎñÆ÷½¨Á¢Á¬½Ó
-					1¡¢Èç¹û senderWorkerMap ²»°üº¬Á¬½Ósid
-						1¡¢´Ó view ÖÐ»ñÈ¡sidµÄ·þÎñÆ÷µØÖ·
-						2¡¢´´½¨socket¶ÔÏó
-						3¡¢¿ªÊ¼³õÊ¼»¯Á¬½Ó
-							1¡¢»ñÈ¡Êä³öÁ÷£¬²¢·¢ËÍ sid 
-							2¡¢»ñÈ¡ ÊäÈëÁ÷
-							3¡¢authenticate learner
-							4¡¢Èç¹ûsid > ±¾»úsid
-								Ö±½Ó¹ØµôÁ¬½Ó£¬·ÀÖ¹ÖØ¸´½¨Á¢Á¬½Ó£¬myid´óµÄÖ÷¶¯Á¬½ÓmyidÐ¡µÄ
-							5¡¢·ñÔò 
-								1¡¢´´½¨ SendWorker RecvWorker Á½¸öÏß³Ì
-								2¡¢sw.setRecv(rw) °Ñ½ÓÊÕÏß³ÌÉèÖÃµ½·¢ËÍÏß³ÌÖÐ £¿
-								3¡¢Èç¹û senderWorkerMap ÖÐÒÑ¾­´æÔÚ sid µÄ SendWorker, Ö±½Ó¹Øµô
-								4¡¢½«ÐÂ´´½¨µÄ SendWorker ·ÅÈëµ½ senderWorkerMap
-								5¡¢³õÊ¼»¯ sid ¶ÓÁÐ·ÅÈëµ½ queueSendMap
-								6¡¢Æô¶¯Á½¸öÏß³Ì
+äºŒã€org.apache.zookeeper.server.quorum.FastLeaderElection.Messenger.WorkerSender
+	1ã€ä»Ž sendqueue é˜Ÿåˆ—å–ä¸€ä¸ªæ¶ˆæ¯ï¼Œç±»åž‹ä¸º ToSend
+	2ã€å¼€å§‹å¤„ç†æ¶ˆæ¯
+		1ã€å°† ToSend è½¬æ¢ä¸º ByteBuffer
+		2ã€è°ƒç”¨ manager çš„å‘é€æ–¹æ³•
+			1ã€å¦‚æžœæ¶ˆæ¯çš„sid = æœ¬æœºçš„sid
+				ç›´æŽ¥å°†æ¶ˆæ¯æ·»åŠ åˆ°æŽ¥æ”¶è€…é˜Ÿåˆ— recvQueue , ä¸èµ°ç½‘ç»œå±‚
+			2ã€å¦åˆ™
+				1ã€æž„å»ºé˜Ÿåˆ—ï¼Œæ”¾åˆ° queueSendMap ä¸­
+				2ã€å°è¯•ä¸Židä¸ºsidçš„æœåŠ¡å™¨å»ºç«‹è¿žæŽ¥
+					1ã€å¦‚æžœ senderWorkerMap ä¸åŒ…å«è¿žæŽ¥sid
+						1ã€ä»Ž view ä¸­èŽ·å–sidçš„æœåŠ¡å™¨åœ°å€
+						2ã€åˆ›å»ºsocketå¯¹è±¡
+						3ã€å¼€å§‹åˆå§‹åŒ–è¿žæŽ¥
+							1ã€èŽ·å–è¾“å‡ºæµï¼Œå¹¶å‘é€ sid 
+							2ã€èŽ·å– è¾“å…¥æµ
+							3ã€authenticate learner
+							4ã€å¦‚æžœsid > æœ¬æœºsid
+								ç›´æŽ¥å…³æŽ‰è¿žæŽ¥ï¼Œé˜²æ­¢é‡å¤å»ºç«‹è¿žæŽ¥ï¼Œmyidå¤§çš„ä¸»åŠ¨è¿žæŽ¥myidå°çš„
+							5ã€å¦åˆ™ 
+								1ã€åˆ›å»º SendWorker RecvWorker ä¸¤ä¸ªçº¿ç¨‹
+								2ã€sw.setRecv(rw) æŠŠæŽ¥æ”¶çº¿ç¨‹è®¾ç½®åˆ°å‘é€çº¿ç¨‹ä¸­ ï¼Ÿ
+								3ã€å¦‚æžœ senderWorkerMap ä¸­å·²ç»å­˜åœ¨ sid çš„ SendWorker, ç›´æŽ¥å…³æŽ‰
+								4ã€å°†æ–°åˆ›å»ºçš„ SendWorker æ”¾å…¥åˆ° senderWorkerMap
+								5ã€åˆå§‹åŒ– sid é˜Ÿåˆ—æ”¾å…¥åˆ° queueSendMap
+								6ã€å¯åŠ¨ä¸¤ä¸ªçº¿ç¨‹
 			
 			
 			
-Èý¡¢org.apache.zookeeper.server.quorum.QuorumPeerMain#main
-	1¡¢´´½¨ QuorumPeerMain mian
-	2¡¢µ÷ÓÃmainµÄ³õÊ¼»¯ºÍÔËÐÐ·½·¨
-		1¡¢Èç¹û²ÎÊý³¤¶ÈµÈÓÚ1 ½âÎö²ÎÊý QuorumPeerConfig
-		2¡¢Æô¶¯Ò»¸ö¶¨Ê±Çå³ýÈÕÖ¾µÄÈÎÎñ
-		3¡¢Èç¹û²ÎÊý³¤¶ÈµÈÓÚ1£¬ÇÒ²ÎÊýÖÐµÄservers¼¯ºÏ´óÓÚ0
-			1¡¢Æô¶¯¼¯ÈºÄ£Ê½
-				1¡¢³õÊ¼»¯¿Í»§¶ËÓë·þÎñ¶ËµÄÍøÂçÍ¨ÐÅ´¦ÀíÀà ServerCnxnFactory				
-				2¡¢´´½¨²¢³õÊ¼»¯ quorumPeer
-				3¡¢Æô¶¯ quorumPeer
-					1¡¢´ÓÊÂÎñÈÕÖ¾Ä¿Â¼dataLogDirºÍÊý¾Ý¿ìÕÕÄ¿Â¼dataDirÖÐ»Ö¸´³öDataTreeÊý¾Ý 
-					2¡¢¿ªÆô¶Ô¿Í»§¶ËµÄÁ¬½Ó¶Ë¿Ú,Æô¶¯ServerCnxnFactoryÖ÷Ïß³Ì
-					3¡¢´´½¨³öÑ¡¾ÙËã·¨, ³õÊ¼»¯
-						1¡¢ÏÈÍ¶¸ø×Ô¼º currentVote=×Ô¼º
-						2¡¢´ÓÅäÖÃÖÐÄÃ×Ô¼ºµÄÑ¡¾ÙµØÖ·£¬¸³Öµ¸ø myQuorumAddr
-						3¡¢¸ù¾ÝÅäÖÃ£¬»ñÈ¡Ñ¡¾ÙËã·¨
-							1¡¢´´½¨leaderÑ¡¾ÙIO¸ºÔðÀà, QuorumCnxManager qcm
-								1¡¢³õÊ¼»¯³ÉÔ±±äÁ¿
-									1¡¢senderWorkerMap  ¶ÔÃ¿Ò»¸öÔ¶³Ì½Úµã¶¼»á¶¨ÒåÒ»¸öSendWorker
-									2¡¢recvQueue  ±¾½ÚµãµÄÏûÏ¢½ÓÊÕ¶ÓÁÐ
-									3¡¢queueSendMap Ã¿¸öÔ¶³Ì½Úµã¶¼»á¶¨ÒåÒ»¸öÏûÏ¢·¢ÐÍ¶Ó
-									4¡¢lastMessageSent ÎªÃ¿¸öSID±£Áô×î½ü·¢ËÍ¹ýµÄÒ»¸öÏûÏ¢
-									×¢Òâ£¬½ÓÊÕÏß³ÌÔÚsendWorkÀïÃæ
-								2¡¢´´½¨¼àÌýÆ÷ Listener 
-							2¡¢Æô¶¯¼àÌýÆ÷, µÈ´ý¼¯ÈºÆäËû»úÆ÷Á¬½Ó
-							3¡¢´´½¨»ùÓÚTCPµÄÑ¡¾ÙËã·¨ FastLeaderElection
-					4¡¢Æô¶¯ quorumPeer Ïß³Ì 
-				4¡¢join quorumPeer
-		4¡¢·ñÔò
-			1¡¢Æô¶¯µ¥»úÄ£Ê½
-	3¡¢ÍË³ö³ÌÐò
+ä¸‰ã€org.apache.zookeeper.server.quorum.QuorumPeerMain#main
+	1ã€åˆ›å»º QuorumPeerMain mian
+	2ã€è°ƒç”¨mainçš„åˆå§‹åŒ–å’Œè¿è¡Œæ–¹æ³•
+		1ã€å¦‚æžœå‚æ•°é•¿åº¦ç­‰äºŽ1 è§£æžå‚æ•° QuorumPeerConfig
+		2ã€å¯åŠ¨ä¸€ä¸ªå®šæ—¶æ¸…é™¤æ—¥å¿—çš„ä»»åŠ¡
+		3ã€å¦‚æžœå‚æ•°é•¿åº¦ç­‰äºŽ1ï¼Œä¸”å‚æ•°ä¸­çš„serversé›†åˆå¤§äºŽ0
+			1ã€å¯åŠ¨é›†ç¾¤æ¨¡å¼
+				1ã€åˆå§‹åŒ–å®¢æˆ·ç«¯ä¸ŽæœåŠ¡ç«¯çš„ç½‘ç»œé€šä¿¡å¤„ç†ç±» ServerCnxnFactory				
+				2ã€åˆ›å»ºå¹¶åˆå§‹åŒ– quorumPeer
+				3ã€å¯åŠ¨ quorumPeer
+					1ã€ä»Žäº‹åŠ¡æ—¥å¿—ç›®å½•dataLogDirå’Œæ•°æ®å¿«ç…§ç›®å½•dataDirä¸­æ¢å¤å‡ºDataTreeæ•°æ® 
+					2ã€å¼€å¯å¯¹å®¢æˆ·ç«¯çš„è¿žæŽ¥ç«¯å£,å¯åŠ¨ServerCnxnFactoryä¸»çº¿ç¨‹
+					3ã€åˆ›å»ºå‡ºé€‰ä¸¾ç®—æ³•, åˆå§‹åŒ–
+						1ã€å…ˆæŠ•ç»™è‡ªå·± currentVote=è‡ªå·±
+						2ã€ä»Žé…ç½®ä¸­æ‹¿è‡ªå·±çš„é€‰ä¸¾åœ°å€ï¼Œèµ‹å€¼ç»™ myQuorumAddr
+						3ã€æ ¹æ®é…ç½®ï¼ŒèŽ·å–é€‰ä¸¾ç®—æ³•
+							1ã€åˆ›å»ºleaderé€‰ä¸¾IOè´Ÿè´£ç±», QuorumCnxManager qcm
+								1ã€åˆå§‹åŒ–æˆå‘˜å˜é‡
+									1ã€senderWorkerMap  å¯¹æ¯ä¸€ä¸ªè¿œç¨‹èŠ‚ç‚¹éƒ½ä¼šå®šä¹‰ä¸€ä¸ªSendWorker
+									2ã€recvQueue  æœ¬èŠ‚ç‚¹çš„æ¶ˆæ¯æŽ¥æ”¶é˜Ÿåˆ—
+									3ã€queueSendMap æ¯ä¸ªè¿œç¨‹èŠ‚ç‚¹éƒ½ä¼šå®šä¹‰ä¸€ä¸ªæ¶ˆæ¯å‘åž‹é˜Ÿ
+									4ã€lastMessageSent ä¸ºæ¯ä¸ªSIDä¿ç•™æœ€è¿‘å‘é€è¿‡çš„ä¸€ä¸ªæ¶ˆæ¯
+									æ³¨æ„ï¼ŒæŽ¥æ”¶çº¿ç¨‹åœ¨sendWorké‡Œé¢
+								2ã€åˆ›å»ºç›‘å¬å™¨ Listener 
+							2ã€å¯åŠ¨ç›‘å¬å™¨, ç­‰å¾…é›†ç¾¤å…¶ä»–æœºå™¨è¿žæŽ¥
+							3ã€åˆ›å»ºåŸºäºŽTCPçš„é€‰ä¸¾ç®—æ³• FastLeaderElection
+					4ã€å¯åŠ¨ quorumPeer çº¿ç¨‹ 
+				4ã€join quorumPeer
+		4ã€å¦åˆ™
+			1ã€å¯åŠ¨å•æœºæ¨¡å¼
+	3ã€é€€å‡ºç¨‹åº
 	
 	
 	
 	
-ËÄ¡¢org.apache.zookeeper.server.quorum.QuorumPeer#run	
-	1¡¢×¢²áµ½Mbean
-	2¡¢while Ñ­»·
-		1¡¢LOOKING
-			¿ªÊ¼Ñ¡¾Ù£¬µ÷ÓÃ lookForLeader ·½·¨
-		2¡¢OBSERVING
+å››ã€org.apache.zookeeper.server.quorum.QuorumPeer#run	
+	1ã€æ³¨å†Œåˆ°Mbean
+	2ã€while å¾ªçŽ¯
+		1ã€LOOKING
+			å¼€å§‹é€‰ä¸¾ï¼Œè°ƒç”¨ lookForLeader æ–¹æ³•
+		2ã€OBSERVING
 			
-		3¡¢FOLLOWING
-		4¡¢LEADING
+		3ã€FOLLOWING
+		4ã€LEADING
 	
 	
 	
 	
 	
 	
-Îå¡¢org.apache.zookeeper.server.quorum.FastLeaderElection#lookForLeader	
-	1¡¢³õÊ¼»¯ÐÅÏ¢
-		Í¶Æ±Ïä£¬key:ÆäËü·þÎñÆ÷µÄsid£¬value:vote
+äº”ã€org.apache.zookeeper.server.quorum.FastLeaderElection#lookForLeader	
+	1ã€åˆå§‹åŒ–ä¿¡æ¯
+		æŠ•ç¥¨ç®±ï¼Œkey:å…¶å®ƒæœåŠ¡å™¨çš„sidï¼Œvalue:vote
 		HashMap<Long, Vote> recvset = new HashMap<Long, Vote>();
 		HashMap<Long, Vote> outofelection = new HashMap<Long, Vote>();
-	2¡¢Âß¼­Ê±ÖÓ+1  logicalclock
-	3¡¢¸üÐÂÌáÒéÎª×Ô¼º
-	4¡¢Æô¶¯Ê±ÏÈÍ¶¸ø×Ô¼º ¸øËùÓÐ²ÎÓëÍ¶Æ±µÄ»úÆ÷·¢ËÍÍ¨Öª
-		·â×° ToSend , ·ÅÈë sendqueue ¶ÓÁÐ
-	5¡¢Ö÷Ñ­»·£¬Ö±µ½Ñ¡³öleader
-		1¡¢´Ó recvqueue ÀïÄÃµ½Í¶Æ±ÏûÏ¢£¬×Ô¼ºµÄÍ¶Æ±Ò²ÔÚÕâÀï´¦Àí
-		2¡¢Èç¹û½ÓÊÕµ½µÄÏûÏ¢Îª¿Õ £¿
-			1¡¢ÏûÏ¢·¢ÍêÁË£¬¼ÌÐø·¢ËÍ£¬Ò»Ö±µ½Ñ¡³öleaderÎªÖ¹
-			2¡¢ÏûÏ¢»¹ÔÚ£¬¿ÉÄÜÆäËûserver»¹Ã»Æô¶¯£¬³¢ÊÔÁ¬½Ó
-		3¡¢ÊÕµ½ÁËÍ¶Æ±ÏûÏ¢
-			switch Í¶Æ±·þÎñÆ÷µÄ×´Ì¬
-			1¡¢LOOKING
-				1¡¢Èç¹û½ÓÊÕµ½µÄÍ¶Æ±ÂÖ´Î±È×Ô¼º¸ß
-					1¡¢ÉèÖÃ×Ô¼ºµÄÊ±ÖÓÎªÑ¡Æ±µÄÊ±ÖÓ
-					2¡¢Çå¿Õ×Ô¼ºµÄÍ¶Æ±Ïä recvset
-					3¡¢±È½ÏÑ¡Æ±¶ÔÓ¦µÄ·þÎñÆ÷ºÍ±¾»ú£¬Èç¹ûÑ¡Æ±¶ÔÓ¦µÄ·þÎñÆ÷¸üÐÂ£¬¾Í¸üÐÂÍ¶Æ±ÎªÑ¡Æ±Ëù¶ÔÓ¦µÄ·þÎñÆ÷
-					4¡¢·ñÔò¾ÍÍ¶¸ø×Ô¼º
-					5¡¢·¢ËÍÍ¶Æ±
-				2¡¢½ÓÊÕµ½Ñ¡Æ±Ð¡ÓÚ×Ô¼ºµÄÊ±ÖÓ
-					·ÅÆú break
-				3¡¢Èç¹û ±È½ÏÑ¡Æ±¶ÔÓ¦µÄ·þÎñÆ÷ºÍ±¾»ú£¬Èç¹ûÑ¡Æ±¶ÔÓ¦µÄ·þÎñÆ÷¸üÐÂ
-					¸üÐÂÍ¶Æ±ÎªÑ¡Æ±Ëù¶ÔÓ¦µÄ·þÎñÆ÷
-					·¢ËÍÍ¶Æ±
-				4¡¢±£´æ×Ô¼º½ÓÊÕµ½µÄÑ¡Æ± µ½Í¶Æ±Ïä recvset ÖÐ
-				5¡¢ ¸ù¾Ý½ÓÊÕµ½µÄÑ¡Æ±£¬ÒÔ¼°×Ô¼ºµÄÍ¶Æ±£¬À´ÅÐ¶ÏÄÜ²»ÄÜ³ÉÎªleader, Èç¹ûÂú×ã¹ý°ëÑéÖ¤
-					1¡¢Ñ­»·µÈ´ý200ºÁÃë£¬»ñÈ¡Í¶Æ±ÏûÏ¢£¬¿´Áìµ¼ÕßÊÇ·ñÓÐ±ä¶¯
-						½«ÊÕµ½µÄÑ¡Æ±£¬·Åµ½ recvqueue£¬ break£¬ÍË³öÑ­»·
-					2¡¢Èç¹ûÃ»ÓÐ»ñµÃÑ¡Æ±ÁË£¬ÄÇÃ´leaderÒ²¾ÍÑ¡³öÀ´ÁË
-						1¡¢Èç¹ûÑ¡³öµÄÊÇ×Ô¼º£¬¾Í½«×Ô¼ºÉèÖÃÎªleading£¬Èç¹ûÊÇÆäËü·þÎñÆ÷£¬¾Í½«×Ô¼ºÉèÎª¶ÔÓ¦µÄ×´Ì¬
-						2¡¢½«±¾·þÎñÆ÷×îÖÕµÄÆ±·µ»Ø
-						3¡¢Çå¿Õ¶ÓÁÐ recvqueue
-			2¡¢OBSERVING ²»²ÎÓëÑ¡¾Ù 
+	2ã€é€»è¾‘æ—¶é’Ÿ+1  logicalclock
+	3ã€æ›´æ–°æè®®ä¸ºè‡ªå·±
+	4ã€å¯åŠ¨æ—¶å…ˆæŠ•ç»™è‡ªå·± ç»™æ‰€æœ‰å‚ä¸ŽæŠ•ç¥¨çš„æœºå™¨å‘é€é€šçŸ¥
+		å°è£… ToSend , æ”¾å…¥ sendqueue é˜Ÿåˆ—
+	5ã€ä¸»å¾ªçŽ¯ï¼Œç›´åˆ°é€‰å‡ºleader
+		1ã€ä»Ž recvqueue é‡Œæ‹¿åˆ°æŠ•ç¥¨æ¶ˆæ¯ï¼Œè‡ªå·±çš„æŠ•ç¥¨ä¹Ÿåœ¨è¿™é‡Œå¤„ç†
+		2ã€å¦‚æžœæŽ¥æ”¶åˆ°çš„æ¶ˆæ¯ä¸ºç©º ï¼Ÿ
+			1ã€æ¶ˆæ¯å‘å®Œäº†ï¼Œç»§ç»­å‘é€ï¼Œä¸€ç›´åˆ°é€‰å‡ºleaderä¸ºæ­¢
+			2ã€æ¶ˆæ¯è¿˜åœ¨ï¼Œå¯èƒ½å…¶ä»–serverè¿˜æ²¡å¯åŠ¨ï¼Œå°è¯•è¿žæŽ¥
+		3ã€æ”¶åˆ°äº†æŠ•ç¥¨æ¶ˆæ¯
+			switch æŠ•ç¥¨æœåŠ¡å™¨çš„çŠ¶æ€
+			1ã€LOOKING
+				1ã€å¦‚æžœæŽ¥æ”¶åˆ°çš„æŠ•ç¥¨è½®æ¬¡æ¯”è‡ªå·±é«˜
+					1ã€è®¾ç½®è‡ªå·±çš„æ—¶é’Ÿä¸ºé€‰ç¥¨çš„æ—¶é’Ÿ
+					2ã€æ¸…ç©ºè‡ªå·±çš„æŠ•ç¥¨ç®± recvset
+					3ã€æ¯”è¾ƒé€‰ç¥¨å¯¹åº”çš„æœåŠ¡å™¨å’Œæœ¬æœºï¼Œå¦‚æžœé€‰ç¥¨å¯¹åº”çš„æœåŠ¡å™¨æ›´æ–°ï¼Œå°±æ›´æ–°æŠ•ç¥¨ä¸ºé€‰ç¥¨æ‰€å¯¹åº”çš„æœåŠ¡å™¨
+					4ã€å¦åˆ™å°±æŠ•ç»™è‡ªå·±
+					5ã€å‘é€æŠ•ç¥¨
+				2ã€æŽ¥æ”¶åˆ°é€‰ç¥¨å°äºŽè‡ªå·±çš„æ—¶é’Ÿ
+					æ”¾å¼ƒ break
+				3ã€å¦‚æžœ æ¯”è¾ƒé€‰ç¥¨å¯¹åº”çš„æœåŠ¡å™¨å’Œæœ¬æœºï¼Œå¦‚æžœé€‰ç¥¨å¯¹åº”çš„æœåŠ¡å™¨æ›´æ–°
+					æ›´æ–°æŠ•ç¥¨ä¸ºé€‰ç¥¨æ‰€å¯¹åº”çš„æœåŠ¡å™¨
+					å‘é€æŠ•ç¥¨
+				4ã€ä¿å­˜è‡ªå·±æŽ¥æ”¶åˆ°çš„é€‰ç¥¨ åˆ°æŠ•ç¥¨ç®± recvset ä¸­
+				5ã€ æ ¹æ®æŽ¥æ”¶åˆ°çš„é€‰ç¥¨ï¼Œä»¥åŠè‡ªå·±çš„æŠ•ç¥¨ï¼Œæ¥åˆ¤æ–­èƒ½ä¸èƒ½æˆä¸ºleader, å¦‚æžœæ»¡è¶³è¿‡åŠéªŒè¯
+					1ã€å¾ªçŽ¯ç­‰å¾…200æ¯«ç§’ï¼ŒèŽ·å–æŠ•ç¥¨æ¶ˆæ¯ï¼Œçœ‹é¢†å¯¼è€…æ˜¯å¦æœ‰å˜åŠ¨
+						å°†æ”¶åˆ°çš„é€‰ç¥¨ï¼Œæ”¾åˆ° recvqueueï¼Œ breakï¼Œé€€å‡ºå¾ªçŽ¯
+					2ã€å¦‚æžœæ²¡æœ‰èŽ·å¾—é€‰ç¥¨äº†ï¼Œé‚£ä¹ˆleaderä¹Ÿå°±é€‰å‡ºæ¥äº†
+						1ã€å¦‚æžœé€‰å‡ºçš„æ˜¯è‡ªå·±ï¼Œå°±å°†è‡ªå·±è®¾ç½®ä¸ºleadingï¼Œå¦‚æžœæ˜¯å…¶å®ƒæœåŠ¡å™¨ï¼Œå°±å°†è‡ªå·±è®¾ä¸ºå¯¹åº”çš„çŠ¶æ€
+						2ã€å°†æœ¬æœåŠ¡å™¨æœ€ç»ˆçš„ç¥¨è¿”å›ž
+						3ã€æ¸…ç©ºé˜Ÿåˆ— recvqueue
+			2ã€OBSERVING ä¸å‚ä¸Žé€‰ä¸¾ 
 				break
-			3¡¢FOLLOWING LEADING ²ÎÓëÑ¡¾Ù
-				1¡¢Èç¹ûÊÇÍ¬Ò»ÂÖÑ¡¾Ù
-					1¡¢¼ÓÈëµ½±¾»úµÄÍ¶Æ±¼¯ºÏ
-					2¡¢Í¶Æ±ÊÇ·ñ½áÊø£¬Èç¹û½áÊø£¬ÔÙÈ·ÈÏLEADERÊÇ·ñÓÐÐ§
-						1¡¢Èç¹û½áÊø£¬ÐÞ¸Ä×Ô¼ºµÄ×´Ì¬²¢·µ»ØÍ¶Æ±½á¹û
-						2¡¢Çå¿Õ¶ÓÁÐ recvqueue
-						3¡¢½«±¾·þÎñÆ÷×îÖÕµÄÆ±·µ»Ø
-				2¡¢½«Í¶Æ±¼ÓÈëµ½ outofelection
-					1¡¢Í¶Æ±ÊÇ·ñ½áÊø£¬Èç¹û½áÊø£¬ÔÙÈ·ÈÏLEADERÊÇ·ñÓÐÐ§
-						1¡¢Èç¹û½áÊø£¬ÐÞ¸Ä×Ô¼ºµÄ×´Ì¬²¢·µ»ØÍ¶Æ±½á¹û£¬¸üÐÂÂß¼­Ê±ÖÓ logicalclock
-						2¡¢Çå¿Õ¶ÓÁÐ recvqueue
-						3¡¢½«±¾·þÎñÆ÷×îÖÕµÄÆ±·µ»Ø
+			3ã€FOLLOWING LEADING å‚ä¸Žé€‰ä¸¾
+				1ã€å¦‚æžœæ˜¯åŒä¸€è½®é€‰ä¸¾
+					1ã€åŠ å…¥åˆ°æœ¬æœºçš„æŠ•ç¥¨é›†åˆ
+					2ã€æŠ•ç¥¨æ˜¯å¦ç»“æŸï¼Œå¦‚æžœç»“æŸï¼Œå†ç¡®è®¤LEADERæ˜¯å¦æœ‰æ•ˆ
+						1ã€å¦‚æžœç»“æŸï¼Œä¿®æ”¹è‡ªå·±çš„çŠ¶æ€å¹¶è¿”å›žæŠ•ç¥¨ç»“æžœ
+						2ã€æ¸…ç©ºé˜Ÿåˆ— recvqueue
+						3ã€å°†æœ¬æœåŠ¡å™¨æœ€ç»ˆçš„ç¥¨è¿”å›ž
+				2ã€å°†æŠ•ç¥¨åŠ å…¥åˆ° outofelection
+					1ã€æŠ•ç¥¨æ˜¯å¦ç»“æŸï¼Œå¦‚æžœç»“æŸï¼Œå†ç¡®è®¤LEADERæ˜¯å¦æœ‰æ•ˆ
+						1ã€å¦‚æžœç»“æŸï¼Œä¿®æ”¹è‡ªå·±çš„çŠ¶æ€å¹¶è¿”å›žæŠ•ç¥¨ç»“æžœï¼Œæ›´æ–°é€»è¾‘æ—¶é’Ÿ logicalclock
+						2ã€æ¸…ç©ºé˜Ÿåˆ— recvqueue
+						3ã€å°†æœ¬æœåŠ¡å™¨æœ€ç»ˆçš„ç¥¨è¿”å›ž
 	
 	
 	
 	
-e)   Ñ¡Æ±ÓÐÐ§ÐÔÑéÖ¤
-leaderºòÑ¡ÈË»ñµÃ³¬¹ý°ëÊýµÄÑ¡Æ±¡£
-Í¨¹ýLeaderÓÐÐ§ÐÔÐ£Ñé¡£
+e)   é€‰ç¥¨æœ‰æ•ˆæ€§éªŒè¯
+leaderå€™é€‰äººèŽ·å¾—è¶…è¿‡åŠæ•°çš„é€‰ç¥¨ã€‚
+é€šè¿‡Leaderæœ‰æ•ˆæ€§æ ¡éªŒã€‚
  
 
-f)   LeaderÓÐÐ§ÐÔÑéÖ¤
-Èç¹û×Ô¼º²»ÊÇleader£¬ÄÇÃ´Ò»¶¨ÒªÊÕµ½¹ýLeaderµÄÐÅÏ¢£¬¼´ÊÕµ½LeaderÐÅÏ¢£¬²¢ÇÒleaderµÄ»Ø¸´ÐÅÏ¢ÖÐÐû³Æ×Ô¼ºµÄ×´Ì¬ÊÇServerState.LEADING
-Èç¹û×Ô¼ºÊÇleader£¬ÄÇÃ´µ±Ç°logicalclockÒ»¶¨ÒªµÈÓÚÑ¡Æ±ÐÅÏ¢ÖÐµÄelectionEpoch
+f)   Leaderæœ‰æ•ˆæ€§éªŒè¯
+å¦‚æžœè‡ªå·±ä¸æ˜¯leaderï¼Œé‚£ä¹ˆä¸€å®šè¦æ”¶åˆ°è¿‡Leaderçš„ä¿¡æ¯ï¼Œå³æ”¶åˆ°Leaderä¿¡æ¯ï¼Œå¹¶ä¸”leaderçš„å›žå¤ä¿¡æ¯ä¸­å®£ç§°è‡ªå·±çš„çŠ¶æ€æ˜¯ServerState.LEADING
+å¦‚æžœè‡ªå·±æ˜¯leaderï¼Œé‚£ä¹ˆå½“å‰logicalclockä¸€å®šè¦ç­‰äºŽé€‰ç¥¨ä¿¡æ¯ä¸­çš„electionEpoch
 	
 	
 	

@@ -1,42 +1,42 @@
 
-Ò»¡¢·şÎñÆ÷µÄ4ÖĞ×´Ì¬:
+ä¸€ã€æœåŠ¡å™¨çš„4ä¸­çŠ¶æ€:
 
-LOOKING : Ñ°ÕÒLeader×´Ì¬,´¦ÓÚ¸Ã×´Ì¬ĞèÒª½øÈëÑ¡¾ÙÁ÷³Ì
-LEADING : Áìµ¼Õß×´Ì¬,±íÃ÷µ±Ç°½ÇÉ«ÎªLeader
-FOLLOWING: ¸úËæÕß,LeaderÒÑ¾­Ñ¡¾Ù³öÀ´,±íÃ÷µ±Ç°·şÎñ½ÇÉ«ÎªFollower
-OBSERVER: ¹Û²ìÕß×´Ì¬, ±íÃ÷µ±Ç°·şÎñ½ÇÉ«ÎªObserver
+LOOKING : å¯»æ‰¾LeaderçŠ¶æ€,å¤„äºè¯¥çŠ¶æ€éœ€è¦è¿›å…¥é€‰ä¸¾æµç¨‹
+LEADING : é¢†å¯¼è€…çŠ¶æ€,è¡¨æ˜å½“å‰è§’è‰²ä¸ºLeader
+FOLLOWING: è·Ÿéšè€…,Leaderå·²ç»é€‰ä¸¾å‡ºæ¥,è¡¨æ˜å½“å‰æœåŠ¡è§’è‰²ä¸ºFollower
+OBSERVER: è§‚å¯Ÿè€…çŠ¶æ€, è¡¨æ˜å½“å‰æœåŠ¡è§’è‰²ä¸ºObserver
 
-¶ş¡¢ÊÂÎñID:
-    1¡¢zxid
-        ÊÂÎñid£¬ÊÂÎñÇëÇóµÄÎ¨Ò»±ê¼Ç£¬ÓÉleader·şÎñÆ÷¸ºÔğ½øĞĞ·ÖÅä¡£
-        ¸ß32Î»ÊÇpeerEpoch£¬µÍ32Î»ÊÇÇëÇóµÄ¼ÆÊı£¬´Ó0¿ªÊ¼¡£
-    2¡¢peerEpoch
-        Ã¿´ÎleaderÑ¡¾ÙÍê³ÉÖ®ºó£¬¶¼»áÑ¡¾Ù³öÒ»¸öĞÂµÄpeerEpoch£¬ÓÃÀ´±ê¼ÇÊÂÎñÇëÇóËùÊôµÄÂÖ´Î¡£
-    3¡¢electionEpoch
-        Ã¿´ÎleaderÑ¡¾Ù£¬electionEpoch¾Í»á×ÔÔö1£¬Í³¼ÆÑ¡Æ±ĞÅÏ¢Ê±£¬Ê×ÏÈ±£Ö¤electionEpochÏàÍ¬
-
-
-
-1¡¢org.apache.zookeeper.server.quorum.QuorumCnxManager(´«Êä²ã)
-    ÊµÏÖÁìµ¼Ñ¡¾ÙÖĞµÄÍøÂçÁ¬½Ó¹ÜÀí¹¦ÄÜ¡£
-    ËüÎªÃ¿Ò»¶Ô½ÚµãÎ¬»¤Î¨Ò»µÄÒ»¸öÁ¬½Ó£¬ÔÚÁ½¸ö½Úµã¶¼Æô¶¯ÉêÇëÁ¬½ÓÊ±£¬Ö»ÓĞsid´óµÄÒ»·½²Å»áÉêÇëÁ¬½Ó³É¹¦¡£
-    qcm¶ÔÃ¿¸ö½ÚµãÎ¬»¤Ò»¸öÏûÏ¢·¢ËÍ¶ÓÁĞ
-
-    public final ArrayBlockingQueue<Message> recvQueue; //±¾½ÚµãµÄÏûÏ¢½ÓÊÕ¶ÓÁĞ
-    final ConcurrentHashMap<Long, SendWorker> senderWorkerMap;//¶ÔÃ¿Ò»¸öÔ¶³Ì½Úµã¶¼»á¶¨ÒåÒ»¸öSendWorker
-    ConcurrentHashMap<Long, ArrayBlockingQueue<ByteBuffer>> queueSendMap;//Ã¿¸öÔ¶³Ì½Úµã¶¼»á¶¨ÒåÒ»¸öÏûÏ¢·¢ĞÍ¶Ó
-
-    org.apache.zookeeper.server.quorum.QuorumCnxManager.Listener  ¼àÌıÑ¡¾Ù¶Ë¿Ú
-    org.apache.zookeeper.server.quorum.QuorumCnxManager.SendWorker ÓÃÀ´ÏòÆäËû·şÎñÆ÷·¢ËÍÑ¡Æ±ĞÅÏ¢
-    org.apache.zookeeper.server.quorum.QuorumCnxManager.RecvWorker ÓÃÀ´½ÓÊÕÑ¡Æ±
+äºŒã€äº‹åŠ¡ID:
+    1ã€zxid
+        äº‹åŠ¡idï¼Œäº‹åŠ¡è¯·æ±‚çš„å”¯ä¸€æ ‡è®°ï¼Œç”±leaderæœåŠ¡å™¨è´Ÿè´£è¿›è¡Œåˆ†é…ã€‚
+        é«˜32ä½æ˜¯peerEpochï¼Œä½32ä½æ˜¯è¯·æ±‚çš„è®¡æ•°ï¼Œä»0å¼€å§‹ã€‚
+    2ã€peerEpoch
+        æ¯æ¬¡leaderé€‰ä¸¾å®Œæˆä¹‹åï¼Œéƒ½ä¼šé€‰ä¸¾å‡ºä¸€ä¸ªæ–°çš„peerEpochï¼Œç”¨æ¥æ ‡è®°äº‹åŠ¡è¯·æ±‚æ‰€å±çš„è½®æ¬¡ã€‚
+    3ã€electionEpoch
+        æ¯æ¬¡leaderé€‰ä¸¾ï¼ŒelectionEpochå°±ä¼šè‡ªå¢1ï¼Œç»Ÿè®¡é€‰ç¥¨ä¿¡æ¯æ—¶ï¼Œé¦–å…ˆä¿è¯electionEpochç›¸åŒ
 
 
-2¡¢org.apache.zookeeper.server.quorum.FastLeaderElection(Ó¦ÓÃ²ã)
+
+1ã€org.apache.zookeeper.server.quorum.QuorumCnxManager(ä¼ è¾“å±‚)
+    å®ç°é¢†å¯¼é€‰ä¸¾ä¸­çš„ç½‘ç»œè¿æ¥ç®¡ç†åŠŸèƒ½ã€‚
+    å®ƒä¸ºæ¯ä¸€å¯¹èŠ‚ç‚¹ç»´æŠ¤å”¯ä¸€çš„ä¸€ä¸ªè¿æ¥ï¼Œåœ¨ä¸¤ä¸ªèŠ‚ç‚¹éƒ½å¯åŠ¨ç”³è¯·è¿æ¥æ—¶ï¼Œåªæœ‰sidå¤§çš„ä¸€æ–¹æ‰ä¼šç”³è¯·è¿æ¥æˆåŠŸã€‚
+    qcmå¯¹æ¯ä¸ªèŠ‚ç‚¹ç»´æŠ¤ä¸€ä¸ªæ¶ˆæ¯å‘é€é˜Ÿåˆ—
+
+    public final ArrayBlockingQueue<Message> recvQueue; //æœ¬èŠ‚ç‚¹çš„æ¶ˆæ¯æ¥æ”¶é˜Ÿåˆ—
+    final ConcurrentHashMap<Long, SendWorker> senderWorkerMap;//å¯¹æ¯ä¸€ä¸ªè¿œç¨‹èŠ‚ç‚¹éƒ½ä¼šå®šä¹‰ä¸€ä¸ªSendWorker
+    ConcurrentHashMap<Long, ArrayBlockingQueue<ByteBuffer>> queueSendMap;//æ¯ä¸ªè¿œç¨‹èŠ‚ç‚¹éƒ½ä¼šå®šä¹‰ä¸€ä¸ªæ¶ˆæ¯å‘å‹é˜Ÿ
+
+    org.apache.zookeeper.server.quorum.QuorumCnxManager.Listener  ç›‘å¬é€‰ä¸¾ç«¯å£
+    org.apache.zookeeper.server.quorum.QuorumCnxManager.SendWorker ç”¨æ¥å‘å…¶ä»–æœåŠ¡å™¨å‘é€é€‰ç¥¨ä¿¡æ¯
+    org.apache.zookeeper.server.quorum.QuorumCnxManager.RecvWorker ç”¨æ¥æ¥æ”¶é€‰ç¥¨
+
+
+2ã€org.apache.zookeeper.server.quorum.FastLeaderElection(åº”ç”¨å±‚)
     LinkedBlockingQueue<ToSend> sendqueue;
     LinkedBlockingQueue<Notification> recvqueue;
-    Ò²ÓĞÁ½¸ö¶ÓÁĞºÍÁ½¸öÏß³Ì
+    ä¹Ÿæœ‰ä¸¤ä¸ªé˜Ÿåˆ—å’Œä¸¤ä¸ªçº¿ç¨‹
 
-    ¹¹ÔìFastLeaderElection¶ÔÏóÊ±£¬»á¶Ôsendqueue¡¢recvqueue¶ÓÁĞ½øĞĞ³õÊ¼»¯£¬²¢ÇÒÔËĞĞMessenger.WorkerSenderÓëMessenger.WorkerReceiverÏß³Ì
-    ÓÉMessenger.WorkerSender·¢ËÍµ½´«Êä²ãqueueSendMapÖĞ¡£
-    ÓÉMessenger.WorkerReceiver¸ºÔğ´Ó´«Êä²ã»ñÈ¡Êı¾İ²¢·ÅÈërecvqueueÖĞ
-    ÔÚÓ¦ÓÃ²ã£¬Ö»ĞèÒª½«´ı·¢ËÍµÄÑ¡Æ±ĞÅÏ¢Ìí¼Óµ½sendqueueÖĞ¼´¿ÉÍê³ÉÑ¡Æ±ĞÅÏ¢·¢ËÍ£¬»òÕß´ÓrecvqueueÖĞ»ñÈ¡ÔªËØ¼´¿ÉµÃµ½Ñ¡Æ±ĞÅÏ¢¡£
+    æ„é€ FastLeaderElectionå¯¹è±¡æ—¶ï¼Œä¼šå¯¹sendqueueã€recvqueueé˜Ÿåˆ—è¿›è¡Œåˆå§‹åŒ–ï¼Œå¹¶ä¸”è¿è¡ŒMessenger.WorkerSenderä¸Messenger.WorkerReceiverçº¿ç¨‹
+    ç”±Messenger.WorkerSenderå‘é€åˆ°ä¼ è¾“å±‚queueSendMapä¸­ã€‚
+    ç”±Messenger.WorkerReceiverè´Ÿè´£ä»ä¼ è¾“å±‚è·å–æ•°æ®å¹¶æ”¾å…¥recvqueueä¸­
+    åœ¨åº”ç”¨å±‚ï¼Œåªéœ€è¦å°†å¾…å‘é€çš„é€‰ç¥¨ä¿¡æ¯æ·»åŠ åˆ°sendqueueä¸­å³å¯å®Œæˆé€‰ç¥¨ä¿¡æ¯å‘é€ï¼Œæˆ–è€…ä»recvqueueä¸­è·å–å…ƒç´ å³å¯å¾—åˆ°é€‰ç¥¨ä¿¡æ¯ã€‚

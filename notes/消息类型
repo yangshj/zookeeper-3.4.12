@@ -1,28 +1,28 @@
-1. Êý¾ÝÍ¬²½ÐÍ
-ÏûÏ¢ÀàÐÍ	        ·¢ËÍ·½-->½ÓÊÕ·½	    ËµÃ÷
-DIFF,13	        Leader-->learner	Í¨ÖªLearner·þÎñÆ÷£¬leader¼´½«ÓëÆä½øÐÐDIFF·½Ê½µÄÊý¾ÝÍ¬²½
-TRUNC,14	    Leader-->learner	´¥·¢Learner½øÐÐÄÚ´æÊý¾Ý¿âµÄ»Ø¹ö²Ù×÷
-SNAP,15	        Leader-->learner	leader¼´½«ÓëÆä½øÐÐ¡±È«Á¿¡°Êý¾ÝÍ¬²½
-UPTODATE,12	    Leader-->learner	¸æËßLearner·þÎñÆ÷ÒÑ¾­Íê³ÉÁËÊý¾ÝÍ¬²½£¬¿ÉÒÔ¿ªÊ¼¶ÔÍâÌá¹©·þÎñÁË
+1. æ•°æ®åŒæ­¥åž‹
+æ¶ˆæ¯ç±»åž‹	        å‘é€æ–¹-->æŽ¥æ”¶æ–¹	    è¯´æ˜Ž
+DIFF,13	        Leader-->learner	é€šçŸ¥LearneræœåŠ¡å™¨ï¼Œleaderå³å°†ä¸Žå…¶è¿›è¡ŒDIFFæ–¹å¼çš„æ•°æ®åŒæ­¥
+TRUNC,14	    Leader-->learner	è§¦å‘Learnerè¿›è¡Œå†…å­˜æ•°æ®åº“çš„å›žæ»šæ“ä½œ
+SNAP,15	        Leader-->learner	leaderå³å°†ä¸Žå…¶è¿›è¡Œâ€å…¨é‡â€œæ•°æ®åŒæ­¥
+UPTODATE,12	    Leader-->learner	å‘Šè¯‰LearneræœåŠ¡å™¨å·²ç»å®Œæˆäº†æ•°æ®åŒæ­¥ï¼Œå¯ä»¥å¼€å§‹å¯¹å¤–æä¾›æœåŠ¡äº†
 
-2. ·þÎñÆ÷³õÊ¼»¯ÐÍ
-ÏûÏ¢ÀàÐÍ	            ·¢ËÍ·½-->½ÓÊÕ·½	    ËµÃ÷
-OBSERCERINFO,16	    Observer-->Leader	ObserverÔÚÆô¶¯Ê±·¢¸øLeader×¢²á×Ô¼º£¬ÏûÏ¢ÖÐ°üº¬SIDºÍ×Ô¼ºÒÑ´¦ÀíµÄ×îÐÂZXID
-FOLLOWERINFO,11	    Follower-->Leader	FollowerrÔÚÆô¶¯Ê±·¢¸øLeader×¢²á×Ô¼º£¬ÏûÏ¢ÖÐ°üº¬SIDºÍ×Ô¼ºÒÑ´¦ÀíµÄ×îÐÂZXID
-LEADERINFO,17	    Leader-->Learner	LearnerÁ¬ÉÏleaderºó£¬leader·¢ËÍleaderinfo£¬°üº¬×îÐÂµÄEPOCHÖµ
-ACKEPOCH,18	        Learner-->Leader	LearnerÔÚÊÕµ½LEADERINFOºó£¬½«×Ô¼º×îÐÂµÄZXIDºÍEPOCH·¢¸øleader
-NEWLEADER,19	    Leader-->Learner	Êý¾ÝÍ¬²½Ê±£¬LeaderÏòLearner·¢ËÍÒ»¸ö½×¶ÎÐÔµÄ±êÊ¶ÐÅÏ¢
+2. æœåŠ¡å™¨åˆå§‹åŒ–åž‹
+æ¶ˆæ¯ç±»åž‹	            å‘é€æ–¹-->æŽ¥æ”¶æ–¹	    è¯´æ˜Ž
+OBSERCERINFO,16	    Observer-->Leader	Observeråœ¨å¯åŠ¨æ—¶å‘ç»™Leaderæ³¨å†Œè‡ªå·±ï¼Œæ¶ˆæ¯ä¸­åŒ…å«SIDå’Œè‡ªå·±å·²å¤„ç†çš„æœ€æ–°ZXID
+FOLLOWERINFO,11	    Follower-->Leader	Followerråœ¨å¯åŠ¨æ—¶å‘ç»™Leaderæ³¨å†Œè‡ªå·±ï¼Œæ¶ˆæ¯ä¸­åŒ…å«SIDå’Œè‡ªå·±å·²å¤„ç†çš„æœ€æ–°ZXID
+LEADERINFO,17	    Leader-->Learner	Learnerè¿žä¸ŠleaderåŽï¼Œleaderå‘é€leaderinfoï¼ŒåŒ…å«æœ€æ–°çš„EPOCHå€¼
+ACKEPOCH,18	        Learner-->Leader	Learneråœ¨æ”¶åˆ°LEADERINFOåŽï¼Œå°†è‡ªå·±æœ€æ–°çš„ZXIDå’ŒEPOCHå‘ç»™leader
+NEWLEADER,19	    Leader-->Learner	æ•°æ®åŒæ­¥æ—¶ï¼ŒLeaderå‘Learnerå‘é€ä¸€ä¸ªé˜¶æ®µæ€§çš„æ ‡è¯†ä¿¡æ¯
 
-3. ÇëÇó´¦ÀíÐÍ
-ÏûÏ¢ÀàÐÍ	        ·¢ËÍ·½-->½ÓÊÕ·½	    ËµÃ÷
-REQUEST,1	    Learner-->Leader	follower½«ÊÂÎñÇëÇóÒÑREQUESTÐ­ÒéÐÎÊ½×ª·¢¸øLeader½øÐÐ´¦Àí
-PROPOSAL,2	    Leader-->Follower	leader½«ÊÂÎñÇëÇóÒÔPROPOSALÏûÏ¢ÐÎÊ½·¢¸øËùÓÐFollower½øÐÐÊÂÎñÈÕÖ¾µÄ¼ÇÂ¼
-ACK,3	        Follower-->Leader	Follower¼ÇÂ¼ÍêÊÂÎñÈÕÖ¾ºó£¬½«ACK·´À¡¸øLeader
-COMMIT,4	    Leader-->Follower	leader¸æÖªËùÓÐFollower½øÐÐÊÂÎñÌá½»
-INFORM,8	    Leader-->Observer	ÔÚcommit½×¶Î£¬LeaderÖµÐèÒª·¢ËÍÒ»¸öCOMMITÏûÏ¢£¬Follower¾Í¿É¸ù¾ÝÒÑÓÐµÄÊÂÎñÈÕÖ¾Íê³ÉÌá½»ÁË;µ«ÊÇ¶ÔÓÚObserverÔòÐèÒª·¢ËÍÍêÕûµÄÏûÏ¢
-SYNC,7	        Leader-->Learner	ÓÃÓÚÍ¨ÖªLearnerÒÑ¾­Íê³ÉÁËSync²Ù×÷
+3. è¯·æ±‚å¤„ç†åž‹
+æ¶ˆæ¯ç±»åž‹	        å‘é€æ–¹-->æŽ¥æ”¶æ–¹	    è¯´æ˜Ž
+REQUEST,1	    Learner-->Leader	followerå°†äº‹åŠ¡è¯·æ±‚å·²REQUESTåè®®å½¢å¼è½¬å‘ç»™Leaderè¿›è¡Œå¤„ç†
+PROPOSAL,2	    Leader-->Follower	leaderå°†äº‹åŠ¡è¯·æ±‚ä»¥PROPOSALæ¶ˆæ¯å½¢å¼å‘ç»™æ‰€æœ‰Followerè¿›è¡Œäº‹åŠ¡æ—¥å¿—çš„è®°å½•
+ACK,3	        Follower-->Leader	Followerè®°å½•å®Œäº‹åŠ¡æ—¥å¿—åŽï¼Œå°†ACKåé¦ˆç»™Leader
+COMMIT,4	    Leader-->Follower	leaderå‘ŠçŸ¥æ‰€æœ‰Followerè¿›è¡Œäº‹åŠ¡æäº¤
+INFORM,8	    Leader-->Observer	åœ¨commité˜¶æ®µï¼ŒLeaderå€¼éœ€è¦å‘é€ä¸€ä¸ªCOMMITæ¶ˆæ¯ï¼ŒFollowerå°±å¯æ ¹æ®å·²æœ‰çš„äº‹åŠ¡æ—¥å¿—å®Œæˆæäº¤äº†;ä½†æ˜¯å¯¹äºŽObserveråˆ™éœ€è¦å‘é€å®Œæ•´çš„æ¶ˆæ¯
+SYNC,7	        Leader-->Learner	ç”¨äºŽé€šçŸ¥Learnerå·²ç»å®Œæˆäº†Syncæ“ä½œ
 
-4. »á»°¹ÜÀíÐÍ
-ÏûÏ¢ÀàÐÍ	        ·¢ËÍ·½-->½ÓÊÕ·½	    ËµÃ÷
-PING,5	        Leader-->Learner	Leader¶¨ÆÚÏòLearner·¢ËÍPINGÇëÇó£¬Learner½«×Ô¼ºÁ¬½ÓµÄ¿Í»§¶ËÁÐ±í·¢ËÍ¸øLeader,ÓÉLeaderÖð¸ö¶ÔÕâÐ©¿Í»§¶Ë½øÐÐ¼¤»î
-REVALIDATE,6	Learner-->Leader	¿Í»§¶ËÖØÁ¬¹ý³ÌÖÐ£¬ÐÂµÄ·þÎñÆ÷ÐèÒªÏòLeader·¢ËÍ¸ÄÏûÏ¢È·ÈÏ»á»°ÊÇ·ñÒÑ³¬Ê±
+4. ä¼šè¯ç®¡ç†åž‹
+æ¶ˆæ¯ç±»åž‹	        å‘é€æ–¹-->æŽ¥æ”¶æ–¹	    è¯´æ˜Ž
+PING,5	        Leader-->Learner	Leaderå®šæœŸå‘Learnerå‘é€PINGè¯·æ±‚ï¼ŒLearnerå°†è‡ªå·±è¿žæŽ¥çš„å®¢æˆ·ç«¯åˆ—è¡¨å‘é€ç»™Leader,ç”±Leaderé€ä¸ªå¯¹è¿™äº›å®¢æˆ·ç«¯è¿›è¡Œæ¿€æ´»
+REVALIDATE,6	Learner-->Leader	å®¢æˆ·ç«¯é‡è¿žè¿‡ç¨‹ä¸­ï¼Œæ–°çš„æœåŠ¡å™¨éœ€è¦å‘Leaderå‘é€æ”¹æ¶ˆæ¯ç¡®è®¤ä¼šè¯æ˜¯å¦å·²è¶…æ—¶
