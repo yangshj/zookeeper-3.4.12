@@ -103,20 +103,20 @@ public class QuorumPeerMain {
         }
 
         // Start and schedule the the purge task
-        // Æô¶¯Ò»¸ö¶¨Ê±Çå³ıÈÕÖ¾µÄÈÎÎñ
+        // å¯åŠ¨ä¸€ä¸ªå®šæ—¶æ¸…é™¤æ—¥å¿—çš„ä»»åŠ¡
         DatadirCleanupManager purgeMgr = new DatadirCleanupManager(config
                 .getDataDir(), config.getDataLogDir(), config
                 .getSnapRetainCount(), config.getPurgeInterval());
         purgeMgr.start();
 
         if (args.length == 1 && config.servers.size() > 0) {
-            // ¼¯ÈºÄ£Ê½
+            // é›†ç¾¤æ¨¡å¼
             runFromConfig(config);
         } else {
             LOG.warn("Either no config or no quorum defined in config, running "
                     + " in standalone mode");
             // there is only server in the quorum -- run as standalone
-            // µ¥»úÄ£Ê½
+            // å•æœºæ¨¡å¼
             ZooKeeperServerMain.main(args);
         }
     }
@@ -130,12 +130,12 @@ public class QuorumPeerMain {
   
       LOG.info("Starting quorum peer");
       try {
-          // ³õÊ¼»¯¿Í»§¶ËÓë·şÎñ¶ËµÄÍøÂçÍ¨ĞÅ´¦ÀíÀà
+          // åˆå§‹åŒ–å®¢æˆ·ç«¯ä¸æœåŠ¡ç«¯çš„ç½‘ç»œé€šä¿¡å¤„ç†ç±»
           ServerCnxnFactory cnxnFactory = ServerCnxnFactory.createFactory();
           cnxnFactory.configure(config.getClientPortAddress(),
                                 config.getMaxClientCnxns());
 
-          // //zkµÄÂß¼­Ö÷Ïß³Ì£¬¸ºÔğÑ¡¾Ù£¬Í¶Æ±µÈ
+          // //zkçš„é€»è¾‘ä¸»çº¿ç¨‹ï¼Œè´Ÿè´£é€‰ä¸¾ï¼ŒæŠ•ç¥¨ç­‰
           quorumPeer = getQuorumPeer();
           quorumPeer.setQuorumPeers(config.getServers());
           quorumPeer.setTxnFactory(new FileTxnSnapLog(
